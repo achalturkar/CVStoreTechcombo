@@ -1,5 +1,5 @@
 import React from "react";
-import CandidateTable from "../../components/CandidateTable/candidateTable";
+import CandidateTable from "../../components/CandidateTable/CandidateTable";
 import Navbar from "../../components/Navbar/Navbar";
 
 const CVList = () =>{
