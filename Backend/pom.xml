@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.CVStore</groupId>
-	<artifactId>Backend-CVStore</artifactId>
+	<artifactId>CVStore</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Backend-CVStore</name>
+	<name>CVStore</name>
 	<description>CV Store Project</description>
 	<url/>
 	<licenses>

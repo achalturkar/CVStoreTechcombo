@@ -2,7 +2,7 @@
   "build": {
     "builder": "NIXPACKS",
     "buildCommand": "./mvnw clean package -DskipTests || mvn clean package -DskipTests",
-    "startCommand": "java -jar target/*.jar"
+    "startCommand": "java -jar target/CVStore-0.0.1-SNAPSHOT.jar"
   },
   "deploy": {
     "root": "Backend"
