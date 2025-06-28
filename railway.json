@@ -1,0 +1,10 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "./mvnw clean package -DskipTests || mvn clean package -DskipTests",
+    "startCommand": "java -jar target/*.jar"
+  },
+  "deploy": {
+    "root": "Backend"
+  }
+}
