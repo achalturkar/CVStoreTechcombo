@@ -34,7 +34,7 @@ const UploadCandidate = () =>{
     data.append("address", formData.address);
     data.append("file", formData.file);
 
-    const api = "http://localhost:8080/api/candidate/upload";
+    const api = "http://cvstoretechcombo.railway.internal:8080/api/candidate/upload";
     const options = {
       method: "POST",
       body: data,

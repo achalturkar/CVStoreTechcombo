@@ -21,7 +21,7 @@ const ResumeParse = () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://localhost:8080/api/candidate/parse-resume", {
+      const response = await fetch("http://cvstoretechcombo.railway.internal:8080/api/candidate/parse-resume", {
         method: "POST",
         body: formData,
       });
@@ -48,7 +48,7 @@ const ResumeParse = () => {
     data.append("file", file);
 
     try {
-      const response = await fetch("http://localhost:8080/api/candidate/upload", {
+      const response = await fetch("http://cvstoretechcombo.railway.internal:8080/api/candidate/upload", {
         method: "POST",
         body: data,
       });
