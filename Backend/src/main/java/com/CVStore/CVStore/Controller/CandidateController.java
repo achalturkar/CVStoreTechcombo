@@ -80,7 +80,7 @@ public class CandidateController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", e.getMessage()));
+                    .body(Map.of("error is show", e.getMessage()));
         }
     }
 }
