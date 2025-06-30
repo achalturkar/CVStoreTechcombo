@@ -22,7 +22,7 @@ const CandidateTable = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch("http://cvstoretechcombo.railway.internal:8080/api/candidate/all");
+            const response = await fetch("https://cvstoretechcombo.railway.internal:8080/api/candidate/all");
             const data = await response.json();
             setCandidates(data);
         } catch (error) {
@@ -36,7 +36,7 @@ const CandidateTable = () => {
 
     const handleDownload = async (id, fullName, skills, experience) => {
         try {
-            const response = await fetch(`http://cvstoretechcombo.railway.internal:8080/api/candidate/download/${id}`, {
+            const response = await fetch(`https://cvstoretechcombo.railway.internal:8080/api/candidate/download/${id}`, {
                 method: "GET"
             });
 
@@ -63,7 +63,7 @@ const CandidateTable = () => {
         if (!confirmDelete) return;
 
         try {
-            const response = await fetch(`http://cvstoretechcombo.railway.internal:8080/api/candidate/delete/${id}`, {
+            const response = await fetch(`https://cvstoretechcombo.railway.internal:8080/api/candidate/delete/${id}`, {
                 method: "DELETE",
             });
 
@@ -79,7 +79,7 @@ const CandidateTable = () => {
 
     const loadCandidateForUpdate = async (id) => {
         try {
-            const res = await fetch(`http://cvstoretechcombo.railway.internal:8080/api/candidate/${id}`);
+            const res = await fetch(`https://cvstoretechcombo.railway.internal:8080/api/candidate/${id}`);
             const data = await res.json();
             setUpdateForm(data);
             setSelectedId(id);
@@ -91,7 +91,7 @@ const CandidateTable = () => {
 
     const handleUpdateSave = async () => {
         try {
-            const response = await fetch(`http://cvstoretechcombo.railway.internal:8080/api/candidate/update/${selectedId}`, {
+            const response = await fetch(`https://cvstoretechcombo.railway.internal:8080/api/candidate/update/${selectedId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
