@@ -5,6 +5,8 @@ const ResumeParse = () => {
   const [parsedData, setParsedData] = useState(null);
   const [error, setError] = useState(null);
 
+  const BASE_URL = process.env.REACT_APP_API_URL;
+
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
     setParsedData(null);
@@ -21,7 +23,7 @@ const ResumeParse = () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch("https://cvstoretechcombo.railway.internal:8080/api/candidate/parse-resume", {
+      const response = await fetch(`${BASE_URL}/api/candidate/parse-resume`, {
         method: "POST",
         body: formData,
       });
@@ -48,7 +50,7 @@ const ResumeParse = () => {
     data.append("file", file);
 
     try {
-      const response = await fetch("https://cvstoretechcombo.railway.internal:8080/api/candidate/upload", {
+      const response = await fetch(`${BASE_URL}/api/candidate/upload`, {
         method: "POST",
         body: data,
       });
@@ -98,7 +100,13 @@ const ResumeParse = () => {
               </li>
             ))}
           </ul>
-       
+
+          <button
+            onClick={handleSubmit}
+            className="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full"
+          >
+            Submit Candidate
+          </button>
         </div>
       )}
 

@@ -1,9 +1,10 @@
-"use client"
+"use client";
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdDownloadForOffline, MdDelete } from "react-icons/md";
 import React from 'react';
+
 const CandidateTable = () => {
     const [candidates, setCandidates] = useState([]);
     const [updateForm, setUpdateForm] = useState({
@@ -14,15 +15,16 @@ const CandidateTable = () => {
         skills: "",
         address: "",
     });
-      const navigate = useNavigate();
 
-
+    const navigate = useNavigate();
     const [showUpdateForm, setShowUpdateForm] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
 
+    const BASE_URL = process.env.REACT_APP_API_URL;
+
     const fetchData = async () => {
         try {
-            const response = await fetch("https://cvstoretechcombo.railway.internal:8080/api/candidate/all");
+            const response = await fetch(`${BASE_URL}/api/candidate/all`);
             const data = await response.json();
             setCandidates(data);
         } catch (error) {
@@ -36,7 +38,7 @@ const CandidateTable = () => {
 
     const handleDownload = async (id, fullName, skills, experience) => {
         try {
-            const response = await fetch(`https://cvstoretechcombo.railway.internal:8080/api/candidate/download/${id}`, {
+            const response = await fetch(`${BASE_URL}/api/candidate/download/${id}`, {
                 method: "GET"
             });
 
@@ -63,7 +65,7 @@ const CandidateTable = () => {
         if (!confirmDelete) return;
 
         try {
-            const response = await fetch(`https://cvstoretechcombo.railway.internal:8080/api/candidate/delete/${id}`, {
+            const response = await fetch(`${BASE_URL}/api/candidate/delete/${id}`, {
                 method: "DELETE",
             });
 
@@ -79,7 +81,7 @@ const CandidateTable = () => {
 
     const loadCandidateForUpdate = async (id) => {
         try {
-            const res = await fetch(`https://cvstoretechcombo.railway.internal:8080/api/candidate/${id}`);
+            const res = await fetch(`${BASE_URL}/api/candidate/${id}`);
             const data = await res.json();
             setUpdateForm(data);
             setSelectedId(id);
@@ -91,7 +93,7 @@ const CandidateTable = () => {
 
     const handleUpdateSave = async () => {
         try {
-            const response = await fetch(`https://cvstoretechcombo.railway.internal:8080/api/candidate/update/${selectedId}`, {
+            const response = await fetch(`${BASE_URL}/api/candidate/update/${selectedId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
@@ -111,8 +113,6 @@ const CandidateTable = () => {
     };
 
     return (
-
-
         <div className="p-8">
             <h1 className="text-2xl font-bold text-center mb-6">Candidate Details Table</h1>
             <div className="overflow-x-auto">
@@ -162,7 +162,6 @@ const CandidateTable = () => {
                     </tbody>
                 </table>
             </div>
-
         </div>
     );
 };

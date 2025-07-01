@@ -1,9 +1,7 @@
-import React from 'react';
-import { useState } from "react";
+import React, { useState } from "react";
 
-const UploadCandidate = () =>{
-
-     const [formData, setFormData] = useState({
+const UploadCandidate = () => {
+  const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     phoneNumber: "",
@@ -12,6 +10,8 @@ const UploadCandidate = () =>{
     address: "",
     file: null,
   });
+
+  const BASE_URL = process.env.REACT_APP_API_URL;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,14 +34,12 @@ const UploadCandidate = () =>{
     data.append("address", formData.address);
     data.append("file", formData.file);
 
-    const api = "https://cvstoretechcombo.railway.internal:8080/api/candidate/upload";
-    const options = {
-      method: "POST",
-      body: data,
-    };
-
     try {
-      const response = await fetch(api, options);
+      const response = await fetch(`${BASE_URL}/api/candidate/upload`, {
+        method: "POST",
+        body: data,
+      });
+
       const res = await response.text();
 
       if (response.ok) {
@@ -65,17 +63,15 @@ const UploadCandidate = () =>{
     }
   };
 
-
-
-    return(
-        <div className="p-1 md:p-8 lg:p-20 m-1 md:mx-20 lg:mx-24">
+  return (
+    <div className="p-1 md:p-8 lg:p-20 m-1 md:mx-20 lg:mx-24">
       <div className="my-8">
         <h1 className="text-xl font-bold text-center">Upload Employee Details</h1>
       </div>
 
       <form className="px-2 md:px-40" onSubmit={handleSubmit}>
         <div className="gap-4 grid grid-cols-1 md:grid-cols-2 md:px-20">
-          {/* Full Name */}
+
           <div className="flex flex-col">
             <label htmlFor="fullName" className="text-lg font-bold">
               Full Name <span className="text-red-500">*</span>
@@ -90,7 +86,6 @@ const UploadCandidate = () =>{
             />
           </div>
 
-          {/* Email */}
           <div className="flex flex-col">
             <label htmlFor="email" className="text-lg font-bold">
               Email <span className="text-red-500">*</span>
@@ -106,7 +101,6 @@ const UploadCandidate = () =>{
             />
           </div>
 
-          {/* Phone */}
           <div className="flex flex-col">
             <label htmlFor="phoneNumber" className="text-lg font-bold">
               Phone Number <span className="text-red-500">*</span>
@@ -124,7 +118,6 @@ const UploadCandidate = () =>{
             />
           </div>
 
-          {/* Experience */}
           <div className="flex flex-col">
             <label htmlFor="experience" className="text-lg font-bold">
               Experience <span className="text-red-500">*</span>
@@ -147,7 +140,6 @@ const UploadCandidate = () =>{
             </select>
           </div>
 
-          {/* Skills */}
           <div className="flex flex-col">
             <label htmlFor="skills" className="text-lg font-bold">
               Skills <span className="text-red-500">*</span>
@@ -163,7 +155,6 @@ const UploadCandidate = () =>{
             />
           </div>
 
-          {/* Address */}
           <div className="flex flex-col">
             <label htmlFor="address" className="text-lg font-bold">
               Address <span className="text-red-500">*</span>
@@ -179,7 +170,6 @@ const UploadCandidate = () =>{
             />
           </div>
 
-          {/* File Upload */}
           <div className="flex flex-col">
             <label htmlFor="file" className="text-lg font-bold">
               Resume File <span className="text-red-500">*</span>
@@ -195,7 +185,6 @@ const UploadCandidate = () =>{
             />
           </div>
 
-          {/* Submit Button */}
           <div className="text-center mt-8 col-span-2">
             <input
               type="submit"
@@ -207,6 +196,6 @@ const UploadCandidate = () =>{
       </form>
     </div>
   );
-}
+};
 
 export default UploadCandidate;
