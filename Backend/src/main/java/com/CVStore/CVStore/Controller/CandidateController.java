@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin(origins = "https://cv-store-techcombo.vercel.app")
+//@CrossOrigin(origins = "https://localhost:")
 @RestController
 @RequestMapping("/api/candidate")
 public class CandidateController {
