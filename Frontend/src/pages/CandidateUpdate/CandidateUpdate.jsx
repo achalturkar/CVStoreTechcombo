@@ -6,7 +6,7 @@ const CandidateUpdate = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const BASE_URL = process.env.REACT_APP_API_URL;
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
   const [form, setForm] = useState({
     fullName: "",
@@ -20,7 +20,7 @@ const CandidateUpdate = () => {
   useEffect(() => {
     const loadCandidate = async () => {
       try {
-        const res = await fetch(`${BASE_URL}/api/candidate/${id}`);
+        const res = await fetch(`${baseUrl}/api/candidate/${id}`);
         const data = await res.json();
         setForm(data);
       } catch (err) {
@@ -30,11 +30,11 @@ const CandidateUpdate = () => {
     };
 
     loadCandidate();
-  }, [id, BASE_URL]);
+  }, [id, baseUrl]);
 
   const handleUpdate = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/api/candidate/update/${id}`, {
+      const response = await fetch(`${baseUrl}/api/candidate/update/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -53,13 +53,16 @@ const CandidateUpdate = () => {
   return (
     <div className="p-6 max-w-xl mx-auto">
       <h2 className="text-xl font-bold mb-4">Update Candidate</h2>
+      <label htmlFor="name">FullName</label>
       <input
         className="w-full border p-2 mb-2"
         type="text"
+        id="name"
         placeholder="Full Name"
         value={form.fullName}
         onChange={(e) => setForm({ ...form, fullName: e.target.value })}
       />
+      <label htmlFor="email">Email</label>
       <input
         className="w-full border p-2 mb-2"
         type="email"
@@ -67,6 +70,7 @@ const CandidateUpdate = () => {
         value={form.email}
         onChange={(e) => setForm({ ...form, email: e.target.value })}
       />
+      <label htmlFor="name">Phone Number</label>
       <input
         className="w-full border p-2 mb-2"
         type="text"
@@ -74,23 +78,29 @@ const CandidateUpdate = () => {
         value={form.phoneNumber}
         onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })}
       />
+      <label htmlFor="exp">Experience</label>
       <input
         className="w-full border p-2 mb-2"
         type="text"
         placeholder="Experience"
+        id="exp"
         value={form.experience}
         onChange={(e) => setForm({ ...form, experience: e.target.value })}
       />
+      <label htmlFor="skill">Skills</label>
       <input
         className="w-full border p-2 mb-2"
         type="text"
         placeholder="Skills"
+        id="skill"
         value={form.skills}
         onChange={(e) => setForm({ ...form, skills: e.target.value })}
       />
+      <label htmlFor="address">Address</label>
       <input
         className="w-full border p-2 mb-4"
         type="text"
+        id="address"
         placeholder="Address"
         value={form.address}
         onChange={(e) => setForm({ ...form, address: e.target.value })}

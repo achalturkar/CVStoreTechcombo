@@ -132,7 +132,6 @@ public class CandidateService {
         extractedData.put("experience", extractExperience(text));
         extractedData.put("filePath", filePath.toString());
 
-
         Candidate candidate = new Candidate();
         candidate.setFullName(extractedData.get("fullName"));
         candidate.setEmail(extractedData.get("email"));

@@ -11,7 +11,8 @@ const UploadCandidate = () => {
     file: null,
   });
 
-  const BASE_URL = process.env.REACT_APP_API_URL;
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,7 +36,7 @@ const UploadCandidate = () => {
     data.append("file", formData.file);
 
     try {
-      const response = await fetch(`${BASE_URL}/api/candidate/upload`, {
+      const response = await fetch(`${baseUrl}/api/candidate/upload`, {
         method: "POST",
         body: data,
       });

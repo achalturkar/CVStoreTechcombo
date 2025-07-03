@@ -1,6 +1,7 @@
 import React from "react";
 import CandidateTable from "../../components/CandidateTable/CandidateTable";
 import Navbar from "../../components/Navbar/Navbar";
+import Filter from "../../components/Filter/Filter";
 
 const CVList = () =>{
 
@@ -8,6 +9,8 @@ const CVList = () =>{
 
         <>
         <Navbar/>
+
+        <Filter/>
 
         <CandidateTable/>
         

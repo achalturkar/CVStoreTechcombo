@@ -20,11 +20,13 @@ const CandidateTable = () => {
     const [showUpdateForm, setShowUpdateForm] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
 
-    const BASE_URL = process.env.REACT_APP_API_URL;
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+// const BASE_URL = "http://localhost:8080";
 
     const fetchData = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/api/candidate/all`);
+            const response = await fetch(`${baseUrl}/api/candidate/all`);
+
             const data = await response.json();
             setCandidates(data);
         } catch (error) {
@@ -38,7 +40,7 @@ const CandidateTable = () => {
 
     const handleDownload = async (id, fullName, skills, experience) => {
         try {
-            const response = await fetch(`${BASE_URL}/api/candidate/download/${id}`, {
+            const response = await fetch(`${baseUrl}/api/candidate/download/${id}`, {
                 method: "GET"
             });
 
@@ -65,7 +67,7 @@ const CandidateTable = () => {
         if (!confirmDelete) return;
 
         try {
-            const response = await fetch(`${BASE_URL}/api/candidate/delete/${id}`, {
+            const response = await fetch(`${baseUrl}/api/candidate/delete/${id}`, {
                 method: "DELETE",
             });
 
@@ -81,7 +83,7 @@ const CandidateTable = () => {
 
     const loadCandidateForUpdate = async (id) => {
         try {
-            const res = await fetch(`${BASE_URL}/api/candidate/${id}`);
+            const res = await fetch(`${baseUrl}/api/candidate/${id}`);
             const data = await res.json();
             setUpdateForm(data);
             setSelectedId(id);
@@ -93,7 +95,7 @@ const CandidateTable = () => {
 
     const handleUpdateSave = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/api/candidate/update/${selectedId}`, {
+            const response = await fetch(`${baseUrl}/api/candidate/update/${selectedId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
@@ -125,6 +127,7 @@ const CandidateTable = () => {
                             <th className="border p-2">Mobile Number</th>
                             <th className="border p-2">Experience</th>
                             <th className="border p-2">Skills</th>
+                            <th className="border p-2">Location</th>
                             <th className="border p-2">CV</th>
                             <th className="border p-2">Update</th>
                         </tr>
@@ -138,6 +141,7 @@ const CandidateTable = () => {
                                 <td className="border p-2">{each.phoneNumber}</td>
                                 <td className="border p-2">{each.experience}</td>
                                 <td className="border p-2">{each.skills}</td>
+                                <td className="border p-2">{each.address}</td>
                                 <td className="border p-2">
                                     <button className="text-blue-900 text-3xl cursor-pointer"
                                         onClick={() => handleDownload(each.id, each.fullName, each.skills, each.experience)}
