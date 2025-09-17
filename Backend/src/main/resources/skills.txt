@@ -1,0 +1,208 @@
+Java
+Spring
+Spring Boot
+Spring MVC
+Hibernate
+JPA
+Microservices
+REST API
+SOAP
+Maven
+Gradle
+Jenkins
+CI/CD
+JUnit
+Mockito
+TestNG
+Selenium
+Cucumber
+Kotlin
+Scala
+Groovy
+JavaScript
+TypeScript
+React
+Next.js
+Angular
+Vue.js
+Node.js
+Express.js
+HTML
+CSS
+Bootstrap
+Tailwind CSS
+SASS
+jQuery
+JSON
+AJAX
+PHP
+Laravel
+CodeIgniter
+Symfony
+WordPress
+Drupal
+Magento
+Python
+Django
+Flask
+FastAPI
+Pandas
+NumPy
+Scikit-learn
+TensorFlow
+Keras
+PyTorch
+Matplotlib
+Seaborn
+NLTK
+OpenCV
+R
+Shiny
+Tableau
+Power BI
+Excel
+MATLAB
+C
+C++
+C#
+.NET
+ASP.NET
+Entity Framework
+Blazor
+VB.NET
+Rust
+Ruby
+Ruby on Rails
+Perl
+Swift
+Objective-C
+Xcode
+iOS Development
+Android
+Android Studio
+React Native
+Flutter
+Ionic
+Cordova
+Firebase
+GraphQL
+Apollo
+gRPC
+SQL
+MySQL
+PostgreSQL
+Oracle
+SQL Server
+SQLite
+NoSQL
+MongoDB
+Cassandra
+CouchDB
+Redis
+Neo4j
+Elasticsearch
+BigQuery
+Snowflake
+Data Warehousing
+ETL
+Talend
+Informatica
+Apache Kafka
+RabbitMQ
+ActiveMQ
+Zookeeper
+Docker
+Kubernetes
+OpenShift
+Helm
+Terraform
+Ansible
+Puppet
+Chef
+Vagrant
+AWS
+Azure
+Google Cloud
+Heroku
+DigitalOcean
+Linux
+Ubuntu
+CentOS
+Red Hat
+Debian
+Shell Scripting
+PowerShell
+Windows Server
+VMware
+Hyper-V
+Networking
+TCP/IP
+DNS
+Load Balancer
+Firewall
+VPN
+Git
+GitHub
+GitLab
+Bitbucket
+Mercurial
+JIRA
+Confluence
+Agile
+Scrum
+Kanban
+CI/CD Pipelines
+SonarQube
+Prometheus
+Grafana
+Nagios
+Splunk
+Logstash
+ELK Stack
+New Relic
+Sentry
+Datadog
+Security
+Penetration Testing
+OWASP
+Ethical Hacking
+SSL/TLS
+OAuth2
+JWT
+Blockchain
+Ethereum
+Solidity
+Smart Contracts
+Web3.js
+Hardhat
+Truffle
+IPFS
+Machine Learning
+Deep Learning
+Artificial Intelligence
+Computer Vision
+Natural Language Processing
+Reinforcement Learning
+Data Mining
+Data Science
+Big Data
+Apache Hadoop
+Apache Spark
+MapReduce
+Hive
+Pig
+HBase
+Scala Spark
+Storm
+Flink
+Cloud Computing
+DevOps
+MLOps
+IoT
+Embedded Systems
+Arduino
+Raspberry Pi
+Robotics
+Quantum Computing
+Cybersecurity
+Cryptography

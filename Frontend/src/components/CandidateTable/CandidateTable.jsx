@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdDownloadForOffline, MdDelete } from "react-icons/md";
+import { IoEyeSharp } from "react-icons/io5";
+
 import React from 'react';
 
 const CandidateTable = () => {
@@ -15,28 +17,36 @@ const CandidateTable = () => {
         skills: "",
         address: "",
     });
+    const [pageNo, setPageNo] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
 
     const navigate = useNavigate();
     const [showUpdateForm, setShowUpdateForm] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
 
-const baseUrl = import.meta.env.VITE_API_BASE_URL;
-// const BASE_URL = "http://localhost:8080";
 
-    const fetchData = async () => {
+
+    const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+    const fetchData = async (page = 0) => {
         try {
-            const response = await fetch(`${baseUrl}/api/candidate/all`);
-
+            const response = await fetch(`${baseUrl}/api/candidate/all/${page}/10`);
             const data = await response.json();
-            setCandidates(data);
+
+            setCandidates(data.content);
+            setTotalPages(data.totalPages);
+            setPageNo(data.number);
         } catch (error) {
             console.error("Error fetching candidates:", error);
         }
     };
 
     useEffect(() => {
-        fetchData();
+        fetchData(0);
     }, []);
+
+
+
 
     const handleDownload = async (id, fullName, skills, experience) => {
         try {
@@ -116,32 +126,37 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
     return (
         <div className="p-8">
-            <h1 className="text-2xl font-bold text-center mb-6">Candidate Details Table</h1>
+            <h1 className="text-2xl font-bold text-left mb-6">Candidate Details Table</h1>
             <div className="overflow-x-auto">
                 <table className="w-full border-collapse border shadow-lg">
                     <thead className="bg-gray-200">
                         <tr>
-                            <th className="border p-2">Sr. No.</th>
+                            {/* <th className="border p-2">Sr. No.</th> */}
                             <th className="border p-2">Full Name</th>
                             <th className="border p-2">Email</th>
                             <th className="border p-2">Mobile Number</th>
                             <th className="border p-2">Experience</th>
                             <th className="border p-2">Skills</th>
-                            <th className="border p-2">Location</th>
+                            {/* <th className="border p-2">Location</th> */}
                             <th className="border p-2">CV</th>
-                            <th className="border p-2">Update</th>
+                            <th className="border p-2">Edit</th>
                         </tr>
                     </thead>
                     <tbody>
                         {candidates.map((each, index) => (
-                            <tr key={each.id} className="text-center hover:bg-gray-100">
-                                <td className="border p-2">{index + 1}</td>
+                            <tr key={each.id} className="text-center hover:bg-gray-100" >
+                                {/* <td className="border p-2 ">{index + 1}</td> */}
                                 <td className="border p-2">{each.fullName}</td>
                                 <td className="border p-2">{each.email}</td>
                                 <td className="border p-2">{each.phoneNumber}</td>
                                 <td className="border p-2">{each.experience}</td>
-                                <td className="border p-2">{each.skills}</td>
-                                <td className="border p-2">{each.address}</td>
+                                <td>
+                                    {each.skills
+                                        ? each.skills.split(",").slice(0, 10).join(", ") +
+                                        (each.skills.split(",").length > 10 ? " ..." : "")
+                                        : ""}
+                                </td>                
+                                                {/* <td className="border p-2">{each.address}</td> */}
                                 <td className="border p-2">
                                     <button className="text-blue-900 text-3xl cursor-pointer"
                                         onClick={() => handleDownload(each.id, each.fullName, each.skills, each.experience)}
@@ -153,12 +168,17 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
                                     >
                                         <MdDelete />
                                     </button>
+                                    <button className="text-black-800 text-3xl cursor-pointer"
+                                        onClick={() => navigate(`/candidate/${each.id}`)}
+                                    >
+                                        <IoEyeSharp />
+                                    </button>
                                 </td>
                                 <td className="border p-2">
                                     <button className="bg-blue-600 px-3 py-1 rounded text-white hover:bg-red-700 cursor-pointer"
                                         onClick={() => navigate(`/update/${each.id}`)}
                                     >
-                                        Update
+                                        Edit
                                     </button>
                                 </td>
                             </tr>
@@ -166,6 +186,27 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
                     </tbody>
                 </table>
             </div>
+            {/* Pagination Controls */}
+            <div className="flex justify-between items-center mt-4">
+                <button
+                    onClick={() => fetchData(pageNo - 1)}
+                    disabled={pageNo === 0}
+                    className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+                >
+                    Previous
+                </button>
+
+                <span>Page {pageNo + 1} of {totalPages}</span>
+
+                <button
+                    onClick={() => fetchData(pageNo + 1)}
+                    disabled={pageNo + 1 === totalPages}
+                    className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+                >
+                    Next
+                </button>
+            </div>
+
         </div>
     );
 };

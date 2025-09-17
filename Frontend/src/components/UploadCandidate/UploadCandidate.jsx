@@ -65,12 +65,12 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
   };
 
   return (
-    <div className="p-1 md:p-8 lg:p-20 m-1 md:mx-20 lg:mx-24">
+    <div className="p-1 md:p-2 lg:p-20 m-1 md:mx-5 lg:mx-20">
       <div className="my-8">
         <h1 className="text-xl font-bold text-center">Upload Employee Details</h1>
       </div>
 
-      <form className="px-2 md:px-40" onSubmit={handleSubmit}>
+      <form className="px-2 md:px-20 lg:px-30" onSubmit={handleSubmit}>
         <div className="gap-4 grid grid-cols-1 md:grid-cols-2 md:px-20">
 
           <div className="flex flex-col">

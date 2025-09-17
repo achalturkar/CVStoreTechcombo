@@ -7,7 +7,6 @@ const ResumeUpload = () => {
 
     return(
         <>
-        <Navbar/>
         <ResumeParse/>
         
         </>

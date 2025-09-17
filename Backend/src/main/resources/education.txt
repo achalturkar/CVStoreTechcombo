@@ -1,0 +1,20 @@
+MBA
+B.E
+B.Tech
+MCA
+BCA
+B.Sc
+M.Sc
+PhD
+HSC
+SSC
+B.Com
+
+Master of Business Administration
+Bachelor of Engineering
+Bachelor of Technology
+Master of Computer Applications
+Bachelor of Computer Applications
+Bachelor of Science
+Master of Science
+Doctor of Philosophy

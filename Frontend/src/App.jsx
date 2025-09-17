@@ -1,36 +1,48 @@
 import { Routes, Route } from "react-router-dom";
 import React from "react";
 
-import ProtectedRoute from "./api/ProtectedRoute"
+// Components
+import Navbar from './components/Navbar/Navbar';
 
-// const Home = React.lazy(() => import("./pages/Home/Home"))
-
-import Home from "./pages/Home/Home"
-import CVList from "./pages/CVList/CVList"
-import CVUpload from "./pages/CVUpload/CVUpload"
+// Pages
+import Home from "./pages/Home/Home";
+import Login from "./pages/Login/Login";
+import CVList from "./pages/CVList/CVList";
+import CVUpload from "./pages/CVUpload/CVUpload";
 import NotFound from "./pages/NotFound/NotFound";
 import CandidateUpdate from "./pages/CandidateUpdate/CandidateUpdate";
 import ResumeUpload from "./pages/ResumeUpload/ResumeUpload";
+import SearchCandidate from "./pages/SearchCandidate/searchCandidate";
+import CandidateDetail from "./pages/CandidateDetail/CandidateDetail";
+import Forget from "./pages/Forget/Forget";
 
+const App = () => {
+  return (
+    <div className="flex h-screen">
+      <div className="  ">
+        <Navbar />
+      </div>
 
+      <main className="flex-1  p-1 overflow-y-auto py-8 ">
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/cvlist" element={<CVList />} />
+          <Route path="/cvupload" element={<CVUpload />} />
+          <Route path="/update/:id" element={<CandidateUpdate />} />
+          <Route path="/candidate/:id" element={<CandidateDetail />} />
+          <Route path="/fileupload" element={<ResumeUpload />} />
+          <Route path="/searchCandidate" element={<SearchCandidate />} />
+          <Route path="/forget" element={<Forget />} />
+          <Route path="/*" element={<NotFound />} />
+        </Routes>
+      </main>
 
-const App = () => (
-
-  <>
-
-    <Routes>
-      <Route path="/" element={<Home />}></Route>
-      <Route path="/cvlist" element={<CVList />}></Route>
-      <Route path="/cvupload" element={<CVUpload />}></Route>
-      <Route path="/*" element={<NotFound />}></Route>
-      <Route path="/update/:id" element={<CandidateUpdate />}> </Route>
-      <Route path="/fileupload" element={<ResumeUpload />}> </Route>
-
-
-    </Routes>
-  </>
-
-)
-
+      {/* <div className="lg:hidden">
+        <Navbar />
+      </div> */}
+    </div>
+  );
+};
 
 export default App;

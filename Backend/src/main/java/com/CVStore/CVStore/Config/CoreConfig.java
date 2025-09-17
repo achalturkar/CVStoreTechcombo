@@ -13,7 +13,7 @@ public class CoreConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**") // applies to all /api/** endpoints
+                registry.addMapping("/api/**")
                         .allowedOrigins(
                                 "http://localhost:5173",
                                 "https://cv-store-techcombo.vercel.app"

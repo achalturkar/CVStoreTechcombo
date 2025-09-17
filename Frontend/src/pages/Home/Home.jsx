@@ -1,20 +1,21 @@
 import React from 'react';
 import UploadCandidate from "/src/components/UploadCandidate/UploadCandidate"
 import Navbar from '../../components/Navbar/Navbar';
+import Count from '../../components/dashboard/Count/Count';
+import RecentResume from '../../components/dashboard/RecentCandidate/RecentResume';
 
 const Home = () =>{
 
 
     return(
-        <>
-         <Navbar/>
-        <h1>home hai yha aayega pura content
-            
-        </h1>
-       < UploadCandidate />
+        <div>
+
+            <Count/>
+            <RecentResume/>
         
         
-        </>
+        
+        </div>
     )
 }
 export default Home;

@@ -1,0 +1,102 @@
+Tata Consultancy Services (TCS)
+Infosys
+Wipro
+HCL Technologies
+Tech Mahindra
+Larsen & Toubro Infotech (LTI)
+Mindtree
+Mphasis
+Persistent Systems
+Birlasoft
+Hexaware Technologies
+NIIT Technologies
+Sonata Software
+Zensar Technologies
+Cyient
+Firstsource
+Newgen Software
+Oracle Financial Services Software
+Cognizant
+Accenture
+Capgemini
+IBM
+Microsoft
+Google
+Amazon Web Services (AWS)
+Apple
+Meta (Facebook)
+Salesforce
+Adobe
+SAP
+VMware
+Intel
+NVIDIA
+Cisco Systems
+Dell Technologies
+HP (Hewlett Packard Enterprise)
+DXC Technology
+Oracle
+Siemens
+Fujitsu
+Sony
+Qualcomm
+Uber
+Airbnb
+Zoom
+Atlassian
+Slack Technologies
+ServiceNow
+Snowflake
+Palantir Technologies
+Square (Block Inc.)
+Stripe
+Spotify
+LinkedIn
+Twitter (X)
+Dropbox
+Box
+Red Hat
+Autodesk
+Epic Systems
+Intuit
+PayPal
+Shopify
+Workday
+MongoDB
+Splunk
+Cloudera
+Databricks
+Hortonworks
+Tableau Software
+SAS Institute
+Informatica
+Teradata
+Micro Focus
+Broadcom
+Symantec
+McAfee
+Trend Micro
+Check Point Software
+Fortinet
+Palo Alto Networks
+CrowdStrike
+Okta
+Auth0
+ZoomInfo
+DocuSign
+Unity Technologies
+Electronic Arts (EA)
+Ubisoft
+Activision Blizzard
+Square Enix
+Nokia
+Ericsson
+Alcatel-Lucent
+Xerox
+Hitachi Vantara
+TIBCO Software
+Infosys BPM
+Genpact
+EXL Service
+UST Global
+Sutherland Global
