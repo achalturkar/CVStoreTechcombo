@@ -7,6 +7,9 @@ const CandidateSearch = () => {
     const [candidate, setCandidate] = useState(null);
     const [error, setError] = useState('');
 
+      const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+
     const handleSearch = async () => {
         if (!mobile) {
             setError("Please enter mobile number");
@@ -14,7 +17,7 @@ const CandidateSearch = () => {
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/api/candidate/search/${mobile}`);
+            const response = await fetch(`${baseUrl}/api/candidate/search/${mobile}`);
             if (!response.ok) {
                 throw new Error("Candidate not found");
             }

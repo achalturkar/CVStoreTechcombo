@@ -17,6 +17,7 @@ const SearchResult = () => {
 
     const [submittedKeyword, setSubmittedKeyword] = useState("");
 
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 
   // ✅ Sync context keyword when URL param changes
@@ -48,7 +49,7 @@ const SearchResult = () => {
 
   // ✅ Fetch candidates
   const fetchData = () => {
-    fetch(`http://localhost:8080/api/candidate/search/filter?${queryParams}`)
+    fetch(`${baseUrl}/api/candidate/search/filter?${queryParams}`)
       .then((res) => res.json())
       .then((data) => {
         setResults(data.content || []);
