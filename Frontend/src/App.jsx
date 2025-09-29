@@ -35,7 +35,7 @@ const App = () => {
           <Route path="/update/:id" element={<CandidateUpdate />} />
           <Route path="/candidate/:id" element={<CandidateDetail />} />
           <Route path="/fileupload" element={<ResumeUpload />} />
-          <Route path="/searchCandidate" element={<SearchCandidate />} />
+          {/* <Route path="/searchCandidate" element={<SearchCandidate />} /> */}
           <Route path="/searchResult" element={<SearchResult />} />
           <Route path="/forget" element={<Forget />} />
           <Route path="/*" element={<NotFound />} />
