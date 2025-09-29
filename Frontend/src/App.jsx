@@ -15,7 +15,6 @@ import ResumeUpload from "./pages/ResumeUpload/ResumeUpload";
 import CandidateDetail from "./pages/CandidateDetail/CandidateDetail";
 import SearchResult from "./pages/SearchResult/SearchResult";
 import Forget from "./pages/Forget/Forget";
-import Filter from "./components/Filter/Filter";
 
 const App = () => {
   return (
