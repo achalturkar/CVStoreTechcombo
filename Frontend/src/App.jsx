@@ -12,9 +12,11 @@ import CVUpload from "./pages/CVUpload/CVUpload";
 import NotFound from "./pages/NotFound/NotFound";
 import CandidateUpdate from "./pages/CandidateUpdate/CandidateUpdate";
 import ResumeUpload from "./pages/ResumeUpload/ResumeUpload";
+// import SearchCandidate from "./pages/SearchCandidate/SearchCandidate";
 import CandidateDetail from "./pages/CandidateDetail/CandidateDetail";
 import SearchResult from "./pages/SearchResult/SearchResult";
 import Forget from "./pages/Forget/Forget";
+import Filter from "./components/Filter/Filter";
 
 const App = () => {
   return (
@@ -33,13 +35,16 @@ const App = () => {
           <Route path="/update/:id" element={<CandidateUpdate />} />
           <Route path="/candidate/:id" element={<CandidateDetail />} />
           <Route path="/fileupload" element={<ResumeUpload />} />
+          {/* <Route path="/searchCandidate" element={<SearchCandidate />} /> */}
           <Route path="/searchResult" element={<SearchResult />} />
           <Route path="/forget" element={<Forget />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </main>
 
-  
+      {/* <div className="lg:hidden">
+        <Navbar />
+      </div> */}
     </div>
   );
 };
