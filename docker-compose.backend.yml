@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    build: ./backend
+    build: ./Backend
     container_name: springboot_backend
     restart: unless-stopped
     env_file: .env
