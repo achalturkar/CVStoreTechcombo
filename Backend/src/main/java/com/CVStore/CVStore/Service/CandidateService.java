@@ -1,5 +1,6 @@
 package com.CVStore.CVStore.Service;
 
+import com.CVStore.CVStore.Dto.UploadSummary;
 import com.CVStore.CVStore.Entity.Candidate;
 import com.CVStore.CVStore.Repository.CandidateRepository;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -11,6 +12,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,8 +58,10 @@ public class CandidateService {
         }
     }
 
-    public List<Candidate> getAllCandidates() {
-        return candidateRepository.findAll();
+    //------service logic for Gwtmapping-------------
+
+    public List<Candidate> getAllCandidates(Sort sort) {
+        return candidateRepository.findAll(sort);
     }
 
     public Page<Candidate> recent(Pageable pageable) {
@@ -69,6 +73,9 @@ public class CandidateService {
         return candidateRepository.findById(id);
     }
 
+
+    //-----------download logic----------------
+
     public ResponseEntity<Resource> downloadCV(Long id) {
         try {
             Optional<Candidate> optional = candidateRepository.findById(id);
@@ -78,8 +85,23 @@ public class CandidateService {
             if (!Files.exists(filePath)) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
             Resource resource = new UrlResource(filePath.toUri());
+
+            // Detect content type based on file extension
+            String fileName = filePath.getFileName().toString().toLowerCase();
+            MediaType contentType = MediaType.APPLICATION_OCTET_STREAM; // default fallback
+
+            if (fileName.endsWith(".pdf")) {
+                contentType = MediaType.APPLICATION_PDF;
+            } else if (fileName.endsWith(".docx")) {
+                contentType = MediaType.parseMediaType(
+                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                );
+            } else if (fileName.endsWith(".doc")) {
+                contentType = MediaType.parseMediaType("application/msword");
+            }
+
             return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_PDF)
+                    .contentType(contentType)
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filePath.getFileName() + "\"")
                     .body(resource);
 
@@ -87,6 +109,8 @@ public class CandidateService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    //------------- Delete candidate record from DB-------------
 
     public void deleteCandidate(long id) {
         Candidate candidate = candidateRepository.findById(id)
@@ -99,29 +123,18 @@ public class CandidateService {
                 file.delete();
             }
         }
-
-        // Delete candidate record from DB
         candidateRepository.delete(candidate);
     }
 
 
-    public ResponseEntity<List<Candidate>> searchBySkills(String skills) {
-        List<Candidate> candidates = candidateRepository.findBySkills(skills);
-        return candidates.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(candidates);
-    }
 
 
-    public List<Candidate> searchCandidatesBySkill(String keyword) {
-        return candidateRepository.findBySkillsContainingIgnoreCase(keyword);
-    }
 
     public Optional<Candidate> searchCandidatesByFullName(String fullName) {
         return candidateRepository.findByFullNameContainingIgnoreCase(fullName);
     }
 
-    public List<Candidate> searchCandidates(Long id, String fullName,  String skills) {
-        return candidateRepository.searchByFilters(id, fullName,  skills);
-    }
+
 
     public List<Candidate> filterCandidates(String fullName, String phoneNumber, String skills, String address, String email) {
         List<Candidate> allCandidates = candidateRepository.findAll();
@@ -140,6 +153,9 @@ public class CandidateService {
                 .orElseThrow(() -> new RuntimeException("Candidate not found with ID: " + id));
 
     }
+
+
+    //-----------update candidate logic PUT Mapping-----------------
 
     public ResponseEntity<Candidate> updateCandidate(Long id, Candidate updated){
         Optional<Candidate> optional = candidateRepository.findById(id);
@@ -162,63 +178,8 @@ public class CandidateService {
     }
 
 
-    //Resume Parsing
-//    public List<Map<String, String>> parseMultipleResumes(MultipartFile[] files, String uploadDir) {
-//        List<Map<String, String>> allExtractedData = new ArrayList<>();
-//        List<Candidate> candidates = new ArrayList<>();
-//
-//        for (MultipartFile file : files) {
-//            try {
-//                // 1. Parse each resume
-//                String text = extractTextFromFile(file);
-//                Map<String, String> extractedData = new HashMap<>();
-//
-//                String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-//                Path uploadPath = Paths.get(uploadDir);
-//                Files.createDirectories(uploadPath);
-//
-//                Path filePath = uploadPath.resolve(fileName);
-//                Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-//
-//                extractedData.put("fullName", extractName(text));
-//                extractedData.put("email", extractEmail(text));
-//                extractedData.put("phoneNumber", extractPhone(text));
-//                extractedData.put("skills", extractSkills(text));
-//                extractedData.put("address", extractAddress(text));
-//                extractedData.put("experience", extractExperience(text));
-//                extractedData.put("filePath", filePath.toString());
-//
-//                allExtractedData.add(extractedData);
-//
-//                // 2. Create Candidate object
-//                Candidate candidate = new Candidate();
-//                candidate.setFullName(extractedData.get("fullName"));
-//                candidate.setEmail(extractedData.get("email"));
-//                candidate.setPhoneNumber(extractedData.get("phoneNumber"));
-//                candidate.setSkills(extractedData.get("skills"));
-//                candidate.setAddress(extractedData.get("address"));
-//                candidate.setExperience(extractedData.get("experience"));
-//                candidate.setFilePath(filePath.toString());
-//
-//                candidates.add(candidate);
-//
-//            } catch (Exception e) {
-//                // If one file fails, add error info instead of stopping whole process
-//                Map<String, String> errorData = new HashMap<>();
-//                errorData.put("fileName", file.getOriginalFilename());
-//                errorData.put("error", e.getMessage());
-//                allExtractedData.add(errorData);
-//            }
-//        }
-//
-//        // 3. Save all candidates at once (bulk insert)
-//        if (!candidates.isEmpty()) {
-//            candidateRepository.saveAll(candidates);
-//        }
-//
-//        return allExtractedData;
-//    }
 
+// -----------Parsing Multiple file Using Loop---------
 
     public List<Map<String, String>> parseMultipleResumes(MultipartFile[] files, String uploadDir) {
         List<Map<String, String>> allExtractedData = new ArrayList<>();
@@ -233,23 +194,37 @@ public class CandidateService {
                 String email = extractEmail(text);
                 String phone = extractPhone(text);
 
-                // 3. Check for duplicates
-                if ((email != null && candidateRepository.existsByEmail(email)) ||
-                        (phone != null && candidateRepository.existsByPhoneNumber(phone))) {
+                // ⚡ Skip if email is null/empty
+                if (email == null || email.trim().isEmpty()) {
+                    Map<String, String> errorData = new HashMap<>();
+                    errorData.put("fileName", file.getOriginalFilename());
+                    errorData.put("status", "skipped");
+                    errorData.put("message", "No valid email found in resume");
+                    allExtractedData.add(errorData);
+                    continue;
+                }
 
+                // 3. Check for duplicates (DB + current batch)
+                boolean alreadyExistsInDb =
+                        candidateRepository.existsByEmail(email) ||
+                                (phone != null && candidateRepository.existsByPhoneNumber(phone));
+
+                boolean alreadyExistsInBatch =
+                        candidatesToSave.stream().anyMatch(c -> c.getEmail().equalsIgnoreCase(email));
+
+                if (alreadyExistsInDb || alreadyExistsInBatch) {
                     Map<String, String> duplicateData = new HashMap<>();
                     duplicateData.put("fileName", file.getOriginalFilename());
-                    duplicateData.put("email", email != null ? email : "N/A");
+                    duplicateData.put("email", email);
                     duplicateData.put("phoneNumber", phone != null ? phone : "N/A");
                     duplicateData.put("status", "duplicate");
-                    duplicateData.put("message", "Candidate already exists in database");
+                    duplicateData.put("message", "Candidate already exists (duplicate)");
                     allExtractedData.add(duplicateData);
-
-                    continue; // Skip saving this candidate
+                    continue;
                 }
 
                 // 4. Save file on disk
-                String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+                String fileName = file.getOriginalFilename();
                 Path uploadPath = Paths.get(uploadDir);
                 Files.createDirectories(uploadPath);
 
@@ -264,6 +239,7 @@ public class CandidateService {
                 extractedData.put("skills", extractSkills(text));
                 extractedData.put("address", extractAddress(text));
                 extractedData.put("experience", extractExperience(text));
+                extractedData.put("designation", extractDesignation(text));
                 extractedData.put("company", extractCompany(text));
                 extractedData.put("education", extractEducation(text));
                 extractedData.put("filePath", filePath.toString());
@@ -279,13 +255,13 @@ public class CandidateService {
                 candidate.setAddress(extractedData.get("address"));
                 candidate.setExperience(extractedData.get("experience"));
                 candidate.setCompany(extractedData.get("company"));
+                candidate.setDesignation(extractedData.get("designation"));
                 candidate.setEducation(extractedData.get("education"));
                 candidate.setFilePath(filePath.toString());
 
                 candidatesToSave.add(candidate);
 
             } catch (Exception e) {
-                // Error while parsing one file → log it but continue
                 Map<String, String> errorData = new HashMap<>();
                 errorData.put("fileName", file.getOriginalFilename());
                 errorData.put("error", e.getMessage());
@@ -303,7 +279,8 @@ public class CandidateService {
     }
 
 
-    //Parsing Logic
+    //---------------Parsing Logic  Regex Logic-------------------
+
 
     public String extractTextFromFile(MultipartFile file) throws IOException {
         String filename = file.getOriginalFilename();
@@ -321,49 +298,6 @@ public class CandidateService {
         }
     }
 
-//    public String extractEmail(String text) {
-//        Matcher matcher = Pattern.compile("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}").matcher(text);
-//        return matcher.find() ? matcher.group() :  UUID.randomUUID()+ "n";
-//    }
-//
-//    public String extractPhone(String text) {
-//        Matcher matcher = Pattern.compile("(\\+91[-\\s]?)?[6-9]\\d{9}").matcher(text);
-//        return matcher.find() ? matcher.group().replaceAll("\\D", "") : "Not found";
-//    }
-//
-//    public String extractName(String text) {
-//        String[] lines = text.split("\\n");
-//        for (String line : lines) {
-//            if (line.matches("(?i)name[:\\s]*[A-Za-z\\s]{3,}")) {
-//                return line.replaceAll("(?i)name[:\\s]*", "").trim();
-//            }
-//        }
-//        return lines.length > 0 ? lines[0].trim() : "Not found";
-//    }
-//
-//
-//    public String extractSkills(String text) throws IOException {
-//        List<String> skills = Files.readAllLines(Paths.get("src/main/resources/skills.txt"));
-//
-//        return skills.stream()
-//                .filter(skill -> text.toLowerCase().contains(skill.toLowerCase()))
-//                .collect(Collectors.joining(", "));
-//    }
-//
-//
-//    public String extractAddress(String text) throws IOException {
-//        Matcher matcher = Pattern.compile("(?i)address[:\\s]*(.*)").matcher(text);
-//        return matcher.find() ? matcher.group(1).trim() : "Not found";
-//
-//
-//    }
-//
-//    public String extractExperience(String text) {
-//        Matcher matcher = Pattern.compile("(\\d+\\+? years? of )", Pattern.CASE_INSENSITIVE).matcher(text);
-//        return matcher.find() ? matcher.group(1) : "Not found";
-//    }
-
-
 
         // -------- EMAIL --------
         public String extractEmail(String text) {
@@ -375,32 +309,113 @@ public class CandidateService {
         }
 
         // -------- PHONE (Indian + International) --------
-        public String extractPhone(String text) {
-            // Covers Indian (10-digit, +91, 91-) and international (+xx, +xxx formats with spaces, dashes, brackets)
-            String phoneRegex =
-                    "(?:(?:\\+?\\d{1,4}[\\s-]?)?" +        // Country code like +91, +1, +44
-                            "(?:\\(?\\d{2,4}\\)?[\\s-]?)?" +      // Area code like (022), (020)
-                            "\\d{3,4}[\\s-]?\\d{3,4})";
+//        public String extractPhone(String text) {
+//            if (text == null || text.isEmpty()) return "";
+//
+//            // Replace non-breaking spaces and weird characters
+//            text = text.replace('\u00A0', ' ');
+//
+//            // Regex: optional country code, digits, spaces/dashes/brackets allowed
+//            Pattern pattern = Pattern.compile(
+//                    "(\\+\\d{1,3}[\\s\\-]?)?" +   // optional country code (+1, +91 etc.)
+//                            "(?:\\d[\\d\\s\\-()]{8,}\\d)" // main number, 10+ digits with optional separators
+//            );
+//
+//            Matcher matcher = pattern.matcher(text);
+//
+//            while (matcher.find()) {
+//                String match = matcher.group().trim();
+//
+//                // Normalize multiple spaces (max 1)
+//                match = match.replaceAll("\\s{2,}", " ");
+//
+//                // Keep only digits and optional leading +
+//                String digitsOnly = match.replaceAll("[^\\d+]", "");
+//
+//                // Validate length (minimum 10 digits for local number)
+//                String cleanedNumber = digitsOnly;
+//                if (digitsOnly.startsWith("+")) {
+//                    // Keep country code + number
+//                    cleanedNumber = digitsOnly;
+//                } else if (digitsOnly.length() >= 10) {
+//                    // Fallback to last 10 digits
+//                    cleanedNumber = digitsOnly.substring(digitsOnly.length() - 10);
+//                } else {
+//                    continue; // too short, skip
+//                }
+//
+//                return cleanedNumber;
+//            }
+//
+//            return ""; // no valid phone found
+//        }
 
-            Matcher matcher = Pattern.compile(phoneRegex).matcher(text);
-
-            if (matcher.find()) {
-                String phone = matcher.group().replaceAll("[^0-9+]", ""); // keep only digits and +
-                return phone;
-            }
-            return ""; // blank if not found
+    public static String extractPhone(String text) {
+        // 1. Initial check for empty or null input.
+        if (text == null || text.trim().isEmpty()) {
+            return null;
         }
 
-        // -------- NAME --------
-        public String extractName(String text) {
-            String[] lines = text.split("\\n");
-            for (String line : lines) {
-                if (line.matches("(?i)name[:\\s]*[A-Za-z\\s]{3,}")) {
-                    return line.replaceAll("(?i)name[:\\s]*", "").trim();
+        // 2. Define a regex to find potential phone number candidates.
+        // This pattern looks for sequences of 10 to 17 characters that can include digits,
+        // an optional leading '+', spaces, hyphens, and parentheses.
+        // It's designed to be broad enough to catch various formats.
+        final Pattern potentialPhonePattern = Pattern.compile(
+                "(?:\\+?\\d[\\d\\s()-]{8,15}\\d)"
+        );
+
+        Matcher matcher = potentialPhonePattern.matcher(text);
+
+        // 3. Loop through all found candidates and validate them.
+        while (matcher.find()) {
+            String potentialMatch = matcher.group();
+
+            // 4. Clean the candidate string.
+            // Remove common separators like spaces, hyphens, and parentheses.
+            // This leaves only digits and the '+' sign.
+            String cleanedNumber = potentialMatch.replaceAll("[\\s()-]", "");
+
+            // 5. Validate the cleaned number based on common patterns.
+            // This is the most important step to eliminate false positives.
+
+            // Case A: International Number
+            if (cleanedNumber.startsWith("+")) {
+                // A valid international number usually has between 11 and 15 digits (including country code).
+                // e.g., +919876543210 has a length of 13.
+                if (cleanedNumber.length() >= 11 && cleanedNumber.length() <= 15) {
+                    return cleanedNumber; // Found a valid international number.
                 }
             }
-            return lines.length > 0 ? lines[0].trim() : "";
+            // Case B: Local Number
+            else {
+                // A standard local number (like in India or the US) has 10 digits.
+                // Your previous false positive "2320192017" has 16 digits, so it would fail this check.
+                if (cleanedNumber.length() == 10) {
+                    return cleanedNumber; // Found a valid 10-digit local number.
+                }
+            }
         }
+
+        // 6. If the loop finishes without finding any valid number, return null.
+        return null;
+    }
+
+
+
+
+    // -------- NAME --------
+    public String extractName(String text) {
+        String[] lines = text.split("\\n");
+        for (String line : lines) {
+            // Looks for a line starting with "Name:", case-insensitive
+            if (line.matches("(?i)name[:\\s]*[A-Za-z\\s]{3,}")) {
+                // Removes the "Name:" part and returns the rest
+                return line.replaceAll("(?i)name[:\\s]*", "").trim();
+            }
+        }
+        // If no line with "Name:" is found, it just returns the first line of the file.
+        return lines.length > 0 ? lines[0].trim() : "";
+    }
 
         // -------- SKILLS --------
         public String extractSkills(String text) throws IOException {
@@ -411,13 +426,65 @@ public class CandidateService {
                     .collect(Collectors.joining(", "));
         }
 
+    // -------- Designation --------
+    public String extractDesignation(String text) throws IOException {
+        List<String> designation = Files.readAllLines(Paths.get("src/main/resources/designation.txt"));
+
+        return designation.stream()
+                .filter(skill -> text.toLowerCase().contains(skill.toLowerCase()))
+                .collect(Collectors.joining(" "));
+    }
+
         // -------- ADDRESS --------
-        public String extractAddress(String text) {
-            Matcher matcher = Pattern.compile("(?i)address[:\\s]*(.*)").matcher(text);
-            return matcher.find() ? matcher.group(1).trim() : "";
+//        public String extractAddress(String text) {
+//            Matcher matcher = Pattern.compile("(?i)address[:\\s]*(.*)").matcher(text);
+//            return matcher.find() ? matcher.group(1).trim() : "";
+//        }
+
+    private static final Pattern PIN_CODE_PATTERN = Pattern.compile("\\b(\\d{6})\\b");
+
+    private static final Set<String> MAJOR_CITIES = new HashSet<>(Arrays.asList(
+            "nagpur", "mumbai", "delhi", "pune", "bengaluru", "bangalore",
+            "chennai", "kolkata", "hyderabad", "chandrapur", "ahmedabad", "bhandara"
+    ));
+    public static String extractAddress(String text) {
+        if (text == null || text.trim().isEmpty()) {
+            return null;
         }
 
-        // -------- EXPERIENCE --------
+        String[] lines = text.split("\\r?\\n");
+
+        // Scan through each line of the resume
+        for (String line : lines) {
+            Matcher pinMatcher = PIN_CODE_PATTERN.matcher(line);
+
+            // Does this line contain a 6-digit PIN code?
+            if (pinMatcher.find()) {
+                String addressCandidate = line.trim();
+
+                boolean cityFound = false;
+                for (String city : MAJOR_CITIES) {
+                    // Check for the city name, case-insensitive
+                    if (addressCandidate.toLowerCase().contains(city)) {
+                        cityFound = true;
+                        break;
+                    }
+                }
+
+                if (cityFound) {
+                    if (addressCandidate.length() <= 150) { // A bit more flexible than 100
+                        return addressCandidate;
+                    }
+                }
+            }
+        }
+
+        // If no line with a PIN code and a city was found, return null.
+        return null;
+    }
+
+
+    // -------- EXPERIENCE --------
         public String extractExperience(String text) {
             // More flexible pattern: e.g. "2 years", "3+ yrs", "10 yrs of exp", "Experience: 5 years"
             String expRegex = "(\\d+\\+?\\s*(years?|yrs?)(\\s*of\\s*exp(erience)?)?)";
@@ -439,6 +506,21 @@ public class CandidateService {
         return companies.stream()
                 .filter(company -> text.toLowerCase().contains(company.toLowerCase()))
                 .collect(Collectors.joining(", "));
+    }
+
+
+
+    //visuals
+
+    public List<UploadSummary> getUploads(String filter) {
+        switch (filter.toLowerCase()) {
+            case "weekly":
+                return candidateRepository.getWeeklyUploads();
+            case "monthly":
+                return candidateRepository.getMonthlyUploads();
+            default:
+                return candidateRepository.getDailyUploads();
+        }
     }
 
 

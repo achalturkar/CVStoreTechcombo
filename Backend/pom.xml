@@ -105,7 +105,24 @@
 			<version>2.9.0</version>
 		</dependency>
 
-<!--		jwt-->
+
+<!--		<dependency>-->
+<!--			<groupId>org.flywaydb</groupId>-->
+<!--			<artifactId>flyway-core</artifactId>-->
+<!--			<version>10.17.0</version>-->
+<!--		</dependency>-->
+
+<!--		<dependency>-->
+<!--			<groupId>org.flywaydb</groupId>-->
+<!--			<artifactId>flyway-database-postgresql</artifactId>-->
+<!--		</dependency>-->
+
+
+
+
+
+
+		<!--		jwt-->
 
 <!--		<dependency>-->
 <!--			<groupId>io.jsonwebtoken</groupId>-->

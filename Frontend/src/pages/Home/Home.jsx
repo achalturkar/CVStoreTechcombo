@@ -3,6 +3,7 @@ import UploadCandidate from "/src/components/UploadCandidate/UploadCandidate"
 import Navbar from '../../components/Navbar/Navbar';
 import Count from '../../components/dashboard/Count/Count';
 import RecentResume from '../../components/dashboard/RecentCandidate/RecentResume';
+import ResumeUploadChart from '../../components/dashboard/ResumeUploadChart/ResumeUploadChart';
 
 const Home = () =>{
 
@@ -12,6 +13,8 @@ const Home = () =>{
 
             <Count/>
             <RecentResume/>
+
+            <ResumeUploadChart/>
         
         
         

@@ -1,11 +1,13 @@
 package com.CVStore.CVStore.Controller;
 
+import com.CVStore.CVStore.Dto.UploadSummary;
 import com.CVStore.CVStore.Entity.Candidate;
 import com.CVStore.CVStore.Repository.CandidateRepository;
 import com.CVStore.CVStore.Service.CandidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,9 +16,14 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 //@CrossOrigin(origins = {"http://localhost:5173", "https://cv-store-techcombo.vercel.app"})
 @RestController
@@ -48,27 +55,8 @@ public class CandidateController {
     ) {
         return candidateService.saveCandidate(file, fullName, phoneNumber, email, experience, address, skills, uploadDir);
     }
+    
 
-   //multiple resume file upload and auto parsing
-//    @PostMapping("/parse-multiple-resumes")
-//    public ResponseEntity<Map<String, String>> parseResume(@RequestParam("files") MultipartFile[] files) {
-//        try {
-//            if (files == null || files.length ==0) {
-//                return ResponseEntity.badRequest().body(Map.of("error", "No file uploaded."));
-//            }
-//            if (files.length > 100) {
-//                return ResponseEntity.badRequest().body(Map.of("error", "Maximum 100 files allowed."));
-//            }
-//            List<Map<String, String>> result = candidateService.parseMultipleResumes(files, uploadDir);
-//
-//            return ResponseEntity.ok((Map<String, String>) result);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body(Map.of("error is show", e.getMessage()));
-//        }
-//    }
 
     @PostMapping("/parse-multiple-resumes")
     public ResponseEntity<?> parseResume(@RequestParam("files") MultipartFile[] files) {
@@ -82,7 +70,7 @@ public class CandidateController {
 
             List<Map<String, String>> result = candidateService.parseMultipleResumes(files, uploadDir);
 
-            return ResponseEntity.ok(result);  // ✅ return List instead of casting to Map
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -93,7 +81,7 @@ public class CandidateController {
 
 
 
-    //GET Mapping
+    //-------GET Mapping----------
 
     //get all candidate using pagination
     @GetMapping("/all/{pageNo}/{pageSize}")
@@ -108,7 +96,7 @@ public class CandidateController {
     //get all candidate without pagination
     @GetMapping("/all")
     public List<Candidate> getAllCandidates() {
-        return candidateService.getAllCandidates();
+        return candidateService.getAllCandidates(Sort.by(Sort.Direction.DESC, "id"));
     }
 
     //get candidate using id
@@ -130,46 +118,85 @@ public class CandidateController {
         return ResponseEntity.ok(candidate);
     }
 
-    //search candidate by skills
-    @GetMapping("/all/{skills}")
-    public ResponseEntity<List<Candidate>> searchBySkills(@PathVariable String skills) {
-        return candidateService.searchBySkills(skills);
-    }
 
-    //search candidate by phone number
-    @GetMapping("/search/{phoneNumber}")
-    public ResponseEntity<?> getCandidateByMobile(@PathVariable String phoneNumber) {
-        Optional<Candidate> candidate = candidateRepository.findByPhoneNumber(phoneNumber);
-        if (candidate.isPresent()) {
-            return ResponseEntity.ok(candidate.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Candidate not found");
-        }
-    }
-
-    //search candidate by all
-    @GetMapping("/search/any")
-    public ResponseEntity<List<Candidate>> searchCandidates(
-            @RequestParam(required = false) Long id,
-            @RequestParam(required = false) String fullName,
-            @RequestParam(required = false) String skills
-    ) {
-        List<Candidate> results = candidateRepository.searchByFilters(id, fullName,  skills);
-        return ResponseEntity.ok(results);
-    }
 
 
     @GetMapping("/filter")
-    public ResponseEntity<List<Candidate>> searchCandidates(
+    public Page<Candidate> searchCandidates(
             @RequestParam(required = false) String fullName,
-            @RequestParam(required = false) String phoneNumber,
+            @RequestParam(required = false) String education,
             @RequestParam(required = false) String skills,
+            @RequestParam(required = false) String company,
+            @RequestParam(required = false) String experience,
             @RequestParam(required = false) String address,
-            @RequestParam(required = false) String email
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
-        List<Candidate> result = candidateService.filterCandidates(fullName, phoneNumber, skills, address, email);
-        return ResponseEntity.ok(result);
+        Pageable pageable = PageRequest.of(page, size);
+        return candidateRepository.searchWithFilters(
+                fullName, education, skills, company, experience, address, pageable
+        );
     }
+
+//    @GetMapping("/filter")
+//    public Page<Candidate> searchCandidates(
+//            @RequestParam(required = false) String keyword, // This is the main search bar query
+//            @RequestParam(required = false) String fullName,
+//            @RequestParam(required = false) String education,
+//            @RequestParam(required = false) String skills,
+//            @RequestParam(required = false) String company,
+//            @RequestParam(required = false) Integer experienceMin, // Changed to Integer
+//            @RequestParam(required = false) String address,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int size
+//    ) {
+//        Pageable pageable = PageRequest.of(page, size);
+//        // Call the new, powerful repository method
+//        return candidateRepository.searchWithTsVector(
+//                keyword, fullName, education, skills, company, experienceMin, address, pageable
+//        );
+//    }
+
+    //all
+//
+    @GetMapping("/search/filter")
+    public Page<Candidate> searchCandidates(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String fullName,
+            @RequestParam(required = false) String education,
+            @RequestParam(required = false) String skills,
+            @RequestParam(required = false) String company,
+            @RequestParam(required = false) String experience,
+            @RequestParam(required = false) String designation,
+            @RequestParam(required = false) String address,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return candidateRepository.searchCandidates(
+                keyword, fullName, education, skills, company, experience, designation, address, pageable
+        );
+    }
+
+//    @GetMapping("/search/filter")
+//    public Page<Candidate> searchCandidates(String keyword, Pageable pageable) {
+//        if (keyword == null || keyword.isBlank()) {
+//            return candidateRepository.findAll(pageable);
+//        }
+//
+//        // Convert spaces into AND operator for tsquery
+//        String tsQuery = Arrays.stream(keyword.trim().split("\\s+"))
+//                .map(String::toLowerCase)
+//                .collect(Collectors.joining(" & "));
+//
+//        return candidateRepository.searchCandidatesNative(keyword, tsQuery, pageable);
+//    }
+
+
+
+
+
+
 
     @GetMapping("/search/name/{fullName}")
     public ResponseEntity<?> getCandidateByName(@PathVariable String fullName){
@@ -181,8 +208,28 @@ public class CandidateController {
         }
     }
 
+    //---search for navbar---
+//    @GetMapping("/search")
+//    public ResponseEntity<List<Candidate>> searchCandidates(@RequestParam String keyword,
+//                                                            @RequestParam(defaultValue = "10") int size) {
+//        List<Candidate> results = candidateRepository.searchCandidates(keyword, PageRequest.of(0, size));
+//        return ResponseEntity.ok(results);
+//    }
 
-//dashboard
+    //-------Search candidate into different page---------
+//    @GetMapping("/search")
+//    public ResponseEntity<Page<Candidate>> searchCandidates(@RequestParam String keyword,
+//                                                            @RequestParam(defaultValue = "0") int page,
+//                                                            @RequestParam(defaultValue = "10") int size) {
+//        Page<Candidate> results = candidateRepository.searchCandidatesPage(keyword, PageRequest.of(page, size));
+//        return ResponseEntity.ok(results);
+//    }
+
+
+
+
+
+//----------dashboard-----------
     //Total Candidate
     @GetMapping("/count")
     public long countCandidate(){
@@ -210,7 +257,7 @@ public class CandidateController {
 
 
 
-    //DELETE Mapping
+    //----------DELETE Mapping----------
 
     //Delete candidate by Using Id
     @DeleteMapping("/delete/{id}")
@@ -221,12 +268,55 @@ public class CandidateController {
 
 
 
-    //PUT Mapping
+    //-------PUT Mapping-----
 
     //update Candidate By using id
     @PutMapping("/update/{id}")
     public ResponseEntity<Candidate> updateCandidate(@PathVariable Long id, @RequestBody Candidate candidate) {
         return candidateService.updateCandidate(id, candidate);
     }
+
+
+//    visual
+
+    @GetMapping("/visuals")
+    public List<UploadSummary> getResumeUploads(
+            @RequestParam(defaultValue = "daily") String filter) {
+        return candidateService.getUploads(filter);
+    }
+
+
+    @GetMapping("/viewResume/{id}")
+    public ResponseEntity<Resource> viewResume(@PathVariable Long id) {
+        try {
+            Optional<Candidate> optional = candidateRepository.findById(id);
+            if (optional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+
+            Path filePath = Paths.get(optional.get().getFilePath());
+            if (!Files.exists(filePath)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+
+            Resource resource = new UrlResource(filePath.toUri());
+
+            // Detect MIME type (PDF, DOCX, etc.)
+            String contentType = Files.probeContentType(filePath);
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filePath.getFileName() + "\"")
+                    .body(resource);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
 
 }

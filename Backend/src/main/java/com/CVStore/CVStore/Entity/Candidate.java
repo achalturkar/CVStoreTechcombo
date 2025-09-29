@@ -18,28 +18,38 @@ public class Candidate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(columnDefinition = "TEXT" )
     private String fullName;
 
-    @Column(unique = true)
+    @Column(unique = true, columnDefinition = "TEXT")
     private String phoneNumber;
 
-    @Column(unique = true)
+
+    @Column(unique = true, columnDefinition = "TEXT")
     private String email;
 
+    @Column(columnDefinition = "TEXT" )
     private String experience;
 
+    @Column(columnDefinition = "TEXT")
     private String skills;
 
+    @Column(columnDefinition = "TEXT")
     private String address;
 
+    @Column(columnDefinition = "TEXT")
     private String company;
 
+    @Column(columnDefinition = "TEXT")
     private String education;
 
+    @Column(columnDefinition = "TEXT")
     private String designation;
 
+    @Column(columnDefinition = "TEXT")
     private String linkedIn;
 
+    @Column(columnDefinition = "TEXT")
     private  String filePath;
 
     @CreationTimestamp

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { handleDownload } from "../../utils/handleDownload";
 
 const CandidateDetail = () => {
   const { id } = useParams();
@@ -10,7 +11,7 @@ const CandidateDetail = () => {
   useEffect(() => {
     const fetchCandidate = async () => {
       try {
-        const res = await fetch(`${baseUrl}/api/candidate/${id}`);
+        const res = await fetch(`${baseUrl}/api/candidate/${id}`, {method: "GET"});
         const data = await res.json();
         setCandidate(data);
       } catch (err) {
@@ -21,22 +22,7 @@ const CandidateDetail = () => {
     fetchCandidate();
   }, [id]);
 
-  const handleDownload = async () => {
-    try {
-      const res = await fetch(`${baseUrl}/api/candidate/download/${id}`);
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `[${candidate.fullName}_CV]`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error("Download error", err);
-    }
-  };
+ 
 
   const handleMail = () => {
     if (candidate?.email) {
@@ -54,15 +40,18 @@ const CandidateDetail = () => {
         <p><strong>Full Name:</strong> {candidate.fullName}</p>
         <p><strong>Email:</strong> {candidate.email}</p>
         <p><strong>Phone:</strong> {candidate.phoneNumber}</p>
-        <p><strong>Address:</strong> {candidate.address}</p>
         <p><strong>Skills:</strong> {candidate.skills}</p>
         <p><strong>Experience:</strong> {candidate.experience}</p>
+        <p><strong>Education:</strong> {candidate.education}</p>
+        <p><strong>Company Worked:</strong> {candidate.company}</p>
+        <p><strong>Address:</strong> {candidate.address}</p>
       </div>
 
       <div className="flex gap-4 mt-6">
         <button
-          onClick={handleDownload}
+          onClick={() => handleDownload(candidate.id, candidate.fullName, candidate.skills, candidate.experience)}
           className="bg-green-600 text-white px-4 py-2 rounded"
+          
         >
           Download Resume
         </button>

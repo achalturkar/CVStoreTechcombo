@@ -23,6 +23,7 @@
     "react-slick": "^0.30.3",
     "react-snap": "^1.23.0",
     "react-spring": "^9.7.5",
+    "recharts": "^3.2.1",
     "slick-carousel": "^1.8.1",
     "swiper": "^11.1.15"
   },

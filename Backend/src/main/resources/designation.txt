@@ -1,0 +1,85 @@
+IT Designations:
+Fullstack Developer
+Backend Developer
+Frontend Developer
+Mobile App Developer
+DevOps Engineer
+IT Consultant
+Software Engineer
+Data Scientist
+Cloud Architect
+QA Engineer
+Database Administrator
+Cybersecurity Analyst
+Systems Engineer
+Network Administrator
+Machine Learning Engineer
+AI Engineer
+Blockchain Developer
+ERP Consultant
+Business Intelligence Analyst
+Technical Support Engineer
+
+Non-IT Designations:
+
+Healthcare:
+- Doctor
+- Nurse
+- Pharmacist
+- Medical Representative
+- Lab Technician
+- Healthcare Administrator
+
+Finance & Banking:
+- Finance Executive
+- Accountant
+- Chartered Accountant (CA)
+- Financial Analyst
+- Investment Banker
+- Loan Officer
+
+Education:
+- Teacher
+- Lecturer
+- Principal
+- Academic Counselor
+- Research Scholar
+- Librarian
+
+Sales & Marketing:
+- Sales Executive
+- Sales Manager
+- Marketing Manager
+- Digital Marketing Executive
+- Brand Manager
+- Business Development Executive
+
+Operations & Management:
+Operations Manager
+- Supply Chain Analyst
+- Logistics Coordinator
+- Procurement Specialist
+Project Manager
+- Administrative Officer
+
+Creative & Media:
+- Content Writer
+- Copywriter
+- Graphic Designer
+- Video Editor
+- Social Media Manager
+- Public Relations Officer
+
+Human Resources:
+HR Executive
+HR Manager
+Talent Acquisition Specialist
+Payroll Officer
+Training & Development Officer
+Employee Relations Specialist
+
+Customer Support:
+- Customer Support Representative
+- Call Center Executive
+- Client Relationship Manager
+- Technical Support (Non-IT)

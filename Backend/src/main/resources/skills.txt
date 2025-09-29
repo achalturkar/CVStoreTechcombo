@@ -56,13 +56,11 @@ Matplotlib
 Seaborn
 NLTK
 OpenCV
-R
 Shiny
 Tableau
 Power BI
 Excel
 MATLAB
-C
 C++
 C#
 .NET
@@ -206,3 +204,11 @@ Robotics
 Quantum Computing
 Cybersecurity
 Cryptography
+Salesforce
+CRM
+Paas
+Saas
+Iaas
+oracle
+EBS
+servicenow
