@@ -7,7 +7,7 @@ const SkillCandidateCount = () =>{
 
 
     const fetchData = async () =>{
-          const res = await fetch(`${baseUrl}/api/candidate/count/${skill}`)
+          const res = await fetch(`${baseUrl}/candidate/count/${skill}`)
           const data= res.json();
           
     }

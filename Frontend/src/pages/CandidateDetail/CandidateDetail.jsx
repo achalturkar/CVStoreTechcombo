@@ -11,7 +11,7 @@ const CandidateDetail = () => {
   useEffect(() => {
     const fetchCandidate = async () => {
       try {
-        const res = await fetch(`${baseUrl}/api/candidate/${id}`, {method: "GET"});
+        const res = await fetch(`${baseUrl}/candidate/${id}`, {method: "GET"});
         const data = await res.json();
         setCandidate(data);
       } catch (err) {

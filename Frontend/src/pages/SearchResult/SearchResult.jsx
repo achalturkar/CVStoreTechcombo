@@ -49,7 +49,7 @@ const SearchResult = () => {
 
   // ✅ Fetch candidates
   const fetchData = () => {
-    fetch(`${baseUrl}/api/candidate/search/filter?${queryParams}`)
+    fetch(`${baseUrl}/candidate/search/filter?${queryParams}`)
       .then((res) => res.json())
       .then((data) => {
         setResults(data.content || []);

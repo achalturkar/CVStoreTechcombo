@@ -20,7 +20,7 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
   useEffect(() => {
     const loadCandidate = async () => {
       try {
-        const res = await fetch(`${baseUrl}/api/candidate/${id}`);
+        const res = await fetch(`${baseUrl}/candidate/${id}`);
         const data = await res.json();
         setForm(data);
       } catch (err) {

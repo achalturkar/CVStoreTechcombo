@@ -25,7 +25,7 @@ const SearchBar = () => {
 
     try {
       const res = await fetch(
-        `${baseUrl}/api/candidate/search/filter?keyword=${encodeURIComponent(q)}`
+        `${baseUrl}/candidate/search/filter?keyword=${encodeURIComponent(q)}`
       );
       const data = await res.json();
 

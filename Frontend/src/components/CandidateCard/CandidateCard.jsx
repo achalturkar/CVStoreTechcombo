@@ -20,7 +20,7 @@ const CandidateCard = () => {
 
   const fetchData = async (page= pageNo) => {
     try {
-      const response = await fetch(`${baseUrl}/api/candidate/all/${page}/9`);
+      const response = await fetch(`${baseUrl}/candidate/all/${page}/9`);
       const data = await response.json();
 
       setCandidates(data.content);

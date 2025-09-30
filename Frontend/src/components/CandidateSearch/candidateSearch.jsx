@@ -17,7 +17,7 @@ const CandidateSearch = () => {
         }
 
         try {
-            const response = await fetch(`${baseUrl}/api/candidate/search/${mobile}`);
+            const response = await fetch(`${baseUrl}/candidate/search/${mobile}`);
             if (!response.ok) {
                 throw new Error("Candidate not found");
             }
