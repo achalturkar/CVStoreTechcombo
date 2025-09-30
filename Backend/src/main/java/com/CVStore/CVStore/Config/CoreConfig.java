@@ -16,6 +16,7 @@ public class CoreConfig {
                 registry.addMapping("/api/**")
                         .allowedOrigins(
                                 "http://localhost:5173",
+                                "https://admin.techcombo.in",
                                 "https://cv-store-techcombo.vercel.app"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
