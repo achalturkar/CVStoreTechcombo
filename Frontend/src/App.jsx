@@ -26,8 +26,8 @@ const App = () => {
       <main className="flex-1  p-1 overflow-y-auto py-10">
         <Routes>
           
-          <Route path="/login" element={<Login />} />
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/cvlist" element={<CVList />} />
           <Route path="/cvupload" element={<CVUpload />} />
           <Route path="/update/:id" element={<CandidateUpdate />} />
