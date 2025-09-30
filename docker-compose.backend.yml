@@ -21,7 +21,7 @@ services:
     environment:
       POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
       POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
-      POSTGRES_DB: techcombo_prodCVStore
+      POSTGRES_DB: cvstore
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
