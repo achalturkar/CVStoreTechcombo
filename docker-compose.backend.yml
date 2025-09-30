@@ -12,6 +12,8 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
 
   postgres:
     image: postgres:16
@@ -26,8 +28,7 @@ services:
       - "5433:5432"
   
 
-  environment:
-  - SPRING_PROFILES_ACTIVE=prod
+  
 
 
 volumes:
