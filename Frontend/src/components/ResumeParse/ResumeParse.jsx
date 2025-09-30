@@ -25,7 +25,7 @@ const ResumeParse = () => {
 
     try {
       const response = await fetch(
-        `${baseUrl}/api/candidate/parse-multiple-resumes`,
+        `${baseUrl}/candidate/parse-multiple-resumes`,
         {
           method: "POST",
           body: formData,

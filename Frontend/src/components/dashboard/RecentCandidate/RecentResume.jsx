@@ -9,7 +9,7 @@ const RecentResume = () => {
 
     const fetchRecentCandidate = async () => {
         try {
-            const res = await fetch(`${baseUrl}/api/candidate/recent`);
+            const res = await fetch(`${baseUrl}/candidate/recent`);
             const data = await res.json();
             setCandidates(data.content);
             console.log(data.content);

@@ -9,7 +9,7 @@ const Count = () =>{
 
     const fetchCount= async() =>{
        try{
-        const res = await fetch(`${baseUrl}/api/candidate/count`);
+        const res = await fetch(`${baseUrl}/candidate/count`);
         const data = await res.json();
         setCount(data);
        }catch(err){
