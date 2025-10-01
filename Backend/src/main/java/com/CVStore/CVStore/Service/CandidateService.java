@@ -17,8 +17,8 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -419,20 +419,49 @@ public class CandidateService {
 
         // -------- SKILLS --------
         public String extractSkills(String text) throws IOException {
-            List<String> skills = Files.readAllLines(Paths.get("src/main/resources/skills.txt"));
 
-            return skills.stream()
-                    .filter(skill -> text.toLowerCase().contains(skill.toLowerCase()))
-                    .collect(Collectors.joining(", "));
+//            List<String> skills = Files.readAllLines(Paths.get("src/main/resources/skills.txt"));
+
+//            return skills.stream()
+//                    .filter(skill -> text.toLowerCase().contains(skill.toLowerCase()))
+//                    .collect(Collectors.joining(", "));
+
+
+            try (InputStream is = getClass().getClassLoader().getResourceAsStream("skills.txt");
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+
+                List<String> skills = reader.lines().collect(Collectors.toList());
+
+                // ... rest of your stream logic
+                return skills.stream()
+                        .filter(skill -> text.toLowerCase().contains(skill.toLowerCase()))
+                        .collect(Collectors.joining(", "));
+
+            } catch (IOException e) {
+                // Handle the exception or re-throw as an unchecked exception if appropriate
+                throw new IOException("Error reading skills.txt from classpath.", e);
+            }
         }
 
     // -------- Designation --------
     public String extractDesignation(String text) throws IOException {
-        List<String> designation = Files.readAllLines(Paths.get("src/main/resources/designation.txt"));
 
-        return designation.stream()
-                .filter(skill -> text.toLowerCase().contains(skill.toLowerCase()))
-                .collect(Collectors.joining(" "));
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("designation.txt");
+             BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+
+            List<String> designation = reader.lines().collect(Collectors.toList());
+
+            // ... rest of your stream logic
+            return designation.stream()
+                    .filter(design -> text.toLowerCase().contains(design.toLowerCase()))
+                    .collect(Collectors.joining(", "));
+
+        } catch (IOException e) {
+            // Handle the exception or re-throw as an unchecked exception if appropriate
+            throw new IOException("Error reading designation.txt from classpath.", e);
+        }
+
+
     }
 
         // -------- ADDRESS --------
@@ -495,17 +524,39 @@ public class CandidateService {
 
 
     public String extractEducation(String text) throws IOException {
-        List<String> courses = Files.readAllLines(Paths.get("src/main/resources/education.txt"));
-        return courses.stream()
-                .filter(course -> text.toLowerCase().contains(course.toLowerCase()))
-                .collect(Collectors.joining(", "));
+
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("education.txt");
+             BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+
+            List<String> education = reader.lines().collect(Collectors.toList());
+
+            // ... rest of your stream logic
+            return education.stream()
+                    .filter(edu -> text.toLowerCase().contains(edu.toLowerCase()))
+                    .collect(Collectors.joining(", "));
+
+        } catch (IOException e) {
+            // Handle the exception or re-throw as an unchecked exception if appropriate
+            throw new IOException("Error reading education.txt from classpath.", e);
+        }
+
     }
 
     public String extractCompany(String text) throws IOException {
-        List<String> companies = Files.readAllLines(Paths.get("src/main/resources/company.txt"));
-        return companies.stream()
-                .filter(company -> text.toLowerCase().contains(company.toLowerCase()))
-                .collect(Collectors.joining(", "));
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("company.txt");
+             BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+
+            List<String> companies = reader.lines().collect(Collectors.toList());
+
+            // ... rest of your stream logic
+            return companies.stream()
+                    .filter(comp -> text.toLowerCase().contains(comp.toLowerCase()))
+                    .collect(Collectors.joining(", "));
+
+        } catch (IOException e) {
+            // Handle the exception or re-throw as an unchecked exception if appropriate
+            throw new IOException("Error reading company.txt from classpath.", e);
+        }
     }
 
 

@@ -1,5 +1,4 @@
-IT Designations:
-Fullstack Developer
+sFullstack Developer
 Backend Developer
 Frontend Developer
 Mobile App Developer
@@ -19,67 +18,49 @@ Blockchain Developer
 ERP Consultant
 Business Intelligence Analyst
 Technical Support Engineer
-
-Non-IT Designations:
-
-Healthcare:
-- Doctor
-- Nurse
-- Pharmacist
-- Medical Representative
-- Lab Technician
-- Healthcare Administrator
-
-Finance & Banking:
-- Finance Executive
-- Accountant
-- Chartered Accountant (CA)
-- Financial Analyst
-- Investment Banker
-- Loan Officer
-
-Education:
-- Teacher
-- Lecturer
-- Principal
-- Academic Counselor
-- Research Scholar
-- Librarian
-
-Sales & Marketing:
-- Sales Executive
-- Sales Manager
-- Marketing Manager
-- Digital Marketing Executive
-- Brand Manager
-- Business Development Executive
-
-Operations & Management:
+Doctor
+Nurse
+Pharmacist
+Medical Representative
+Lab Technician
+Healthcare Administrator
+Finance Executive
+Accountant
+Chartered Accountant (CA)
+Financial Analyst
+Investment Banker
+Loan Officer
+Teacher
+Lecturer
+Principal
+Academic Counselor
+Research Scholar
+Librarian
+Sales Executive
+Sales Manager
+Marketing Manager
+Digital Marketing Executive
+Brand Manager
+Business Development Executive
 Operations Manager
-- Supply Chain Analyst
-- Logistics Coordinator
-- Procurement Specialist
+Supply Chain Analyst
+Logistics Coordinator
+Procurement Specialist
 Project Manager
-- Administrative Officer
-
-Creative & Media:
-- Content Writer
-- Copywriter
-- Graphic Designer
-- Video Editor
-- Social Media Manager
-- Public Relations Officer
-
-Human Resources:
+Administrative Officer
+Content Writer
+Copywriter
+Graphic Designer
+Video Editor
+Social Media Manager
+Public Relations Officer
 HR Executive
 HR Manager
 Talent Acquisition Specialist
 Payroll Officer
 Training & Development Officer
 Employee Relations Specialist
-
-Customer Support:
-- Customer Support Representative
-- Call Center Executive
-- Client Relationship Manager
-- Technical Support (Non-IT)
+Customer Support Representative
+Call Center Executive
+Client Relationship Manager
+Technical Support (Non-IT)
