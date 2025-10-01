@@ -9,7 +9,7 @@ export const handleDelete = async (id, onSuccess) => {
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch(`${baseUrl}/api/candidate/delete/${id}`, {
+      const response = await fetch(`${baseUrl}/candidate/delete/${id}`, {
         method: "DELETE",
       });
 

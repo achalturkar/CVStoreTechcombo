@@ -34,7 +34,7 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
   const handleUpdate = async () => {
     try {
-      const response = await fetch(`${baseUrl}/api/candidate/update/${id}`, {
+      const response = await fetch(`${baseUrl}/candidate/update/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

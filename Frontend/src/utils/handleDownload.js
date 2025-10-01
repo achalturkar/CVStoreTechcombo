@@ -3,7 +3,7 @@
 
  export const handleDownload = async (id, fullName, skills, experience) => {
     try {
-      const response = await fetch(`${baseUrl}/api/candidate/download/${id}`, {
+      const response = await fetch(`${baseUrl}/candidate/download/${id}`, {
         method: "GET",
       });
 
