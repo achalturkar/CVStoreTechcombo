@@ -1,10 +1,15 @@
- 
+ import Cookies from "js-cookie";
    const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+   const token = Cookies.get("jwtToken");
 
  export const handleDownload = async (id, fullName, skills, experience) => {
     try {
       const response = await fetch(`${baseUrl}/candidate/download/${id}`, {
         method: "GET",
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
       });
 
       if (!response.ok) throw new Error("Failed to download file");

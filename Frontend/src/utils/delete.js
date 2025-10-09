@@ -1,5 +1,7 @@
-
+import Cookies from "js-cookie";
    const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+   const token = Cookies.get("jwtToken");
 
 
 export const handleDelete = async (id, onSuccess) => {
@@ -11,6 +13,9 @@ export const handleDelete = async (id, onSuccess) => {
     try {
       const response = await fetch(`${baseUrl}/candidate/delete/${id}`, {
         method: "DELETE",
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
       });
 
       if (!response.ok) throw new Error("Delete failed");
