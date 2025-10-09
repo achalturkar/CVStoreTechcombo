@@ -41,10 +41,11 @@ const RecentResume = () => {
     <div>
 
         <h1>Recent 5 Resume Uploaded</h1>
-      <ul className="list-disc pl-5 space-y-1">
+      <ul className=" pl-5 space-y-1">
         {candidates.length > 0 ? (
           candidates.map((each) => (
-            <li key={each.id}>
+            <li key={each.id} className="flex justify-between ">
+
               {each.fullName} ({each.phoneNumber})
             </li>
           ))
