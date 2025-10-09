@@ -1,48 +1,48 @@
 import { Routes, Route } from "react-router-dom";
 import React from "react";
 
-// Components
-import Navbar from './components/Navbar/Navbar';
+// Layouts
+import DashboardLayout from "./layout/DashboardLayout/DashboardLayout";
+import AuthLayout from "./layout/AuthLayout/AuthLayout"; // create this file
 
 // Pages
 import Home from "./pages/Home/Home";
-import Login from "./pages/Login/Login";
+import Login from "./pages/auth/Login/Login";
+import Forget from "./pages/auth/Forget/Forget";
 import CVList from "./pages/CVList/CVList";
 import CVUpload from "./pages/CVUpload/CVUpload";
-import NotFound from "./pages/NotFound/NotFound";
 import CandidateUpdate from "./pages/CandidateUpdate/CandidateUpdate";
-import ResumeUpload from "./pages/ResumeUpload/ResumeUpload";
 import CandidateDetail from "./pages/CandidateDetail/CandidateDetail";
+import ResumeUpload from "./pages/ResumeUpload/ResumeUpload";
 import SearchResult from "./pages/SearchResult/SearchResult";
-import Forget from "./pages/Forget/Forget";
+import NotFound from "./pages/NotFound/NotFound";
+
+// Components
+import ProtectedRoute from "./components/common/ProtectedRoute/ProtectedRoute";
 
 const App = () => {
   return (
-    <div className="flex h-screen">
-      <div className="  ">
-        <Navbar />
-      </div>
+    <Routes>
+      {/*  Auth Pages (no navbar) */}
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/forget" element={<Forget />} />
+      </Route>
 
-      <main className="flex-1  p-1 overflow-y-auto py-10">
-        <Routes>
-          
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/cvlist" element={<CVList />} />
-          <Route path="/cvupload" element={<CVUpload />} />
-          <Route path="/update/:id" element={<CandidateUpdate />} />
-          <Route path="/candidate/:id" element={<CandidateDetail />} />
-          <Route path="/fileupload" element={<ResumeUpload />} />
-          <Route path="/searchResult" element={<SearchResult />} />
-          <Route path="/forget" element={<Forget />} />
-          <Route path="/*" element={<NotFound />} />
-        </Routes>
-      </main>
+      {/* Dashboard Pages (with navbar + sidebar) */}
+      <Route element={<DashboardLayout />}>
+        <Route path="/" element={<ProtectedRoute element={Home} />} />
+        <Route path="/cvlist" element={<ProtectedRoute element={CVList} />} />
+        <Route path="/cvupload" element={<ProtectedRoute element={CVUpload} />} />
+        <Route path="/update/:id" element={<ProtectedRoute element={CandidateUpdate} />} />
+        <Route path="/candidate/:id" element={<ProtectedRoute element={CandidateDetail} />} />
+        <Route path="/fileupload" element={<ProtectedRoute element={ResumeUpload} />} />
+        <Route path="/searchResult" element={<ProtectedRoute element={SearchResult} />} />
+      </Route>
 
-      {/* <div className="lg:hidden">
-        <Navbar />
-      </div> */}
-    </div>
+      {/*  404 Page */}
+      <Route path="/*" element={<NotFound />} />
+    </Routes>
   );
 };
 

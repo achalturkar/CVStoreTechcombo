@@ -1,18 +1,21 @@
 import React, { useState } from "react";
+import Cookies from "js-cookie";
 
 const UploadCandidate = () => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     phoneNumber: "",
+    designation: "",
+    company: "",
     experience: "",
     skills: "",
     address: "",
     file: null,
   });
 
-const baseUrl = import.meta.env.VITE_API_BASE_URL;
-
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const token = Cookies.get("jwtToken");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,28 +30,25 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
     e.preventDefault();
 
     const data = new FormData();
-    data.append("fullName", formData.fullName);
-    data.append("email", formData.email);
-    data.append("phoneNumber", formData.phoneNumber);
-    data.append("experience", formData.experience);
-    data.append("skills", formData.skills);
-    data.append("address", formData.address);
-    data.append("file", formData.file);
+    Object.keys(formData).forEach((key) => data.append(key, formData[key]));
 
     try {
       const response = await fetch(`${baseUrl}/candidate/upload`, {
         method: "POST",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
         body: data,
       });
 
-      const res = await response.text();
-
       if (response.ok) {
-        alert("Candidate uploaded successfully!");
+        alert("✅ Candidate uploaded successfully!");
         setFormData({
           fullName: "",
           email: "",
           phoneNumber: "",
+          designation: "",
+          company: "",
           experience: "",
           skills: "",
           address: "",
@@ -56,80 +56,71 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
         });
         document.getElementById("file").value = "";
       } else {
-        alert("Failed to upload candidate. Please try again.");
+        alert("❌ Failed to upload candidate. Please try again.");
       }
     } catch (error) {
       console.error("Upload error:", error);
-      alert("An error occurred. Please check the console for details.");
+      alert("⚠️ An error occurred. Please check the console for details.");
     }
   };
 
   return (
-    <div className="p-1 md:p-2 lg:p-20 m-1 md:mx-5 lg:mx-20">
-      <div className="my-8">
-        <h1 className="text-xl font-bold text-center">Upload Employee Details</h1>
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-100 mb-6 md:p-6">
+      <div className="w-full max-w-4xl bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-100">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-6">
+          <h1 className="text-2xl font-bold uppercase tracking-wide">
+            Upload New Candidate
+          </h1>
+          <p className="text-sm text-blue-100 mt-1">
+            Fill in the details to add a new candidate manually
+          </p>
+        </div>
 
-      <form className="px-2 md:px-20 lg:px-30" onSubmit={handleSubmit}>
-        <div className="gap-4 grid grid-cols-1 md:grid-cols-2 md:px-20">
+        {/* Form */}
+        <form
+          className="px-6 md:px-10 py-4 grid grid-cols-1 md:grid-cols-2 gap-4"
+          onSubmit={handleSubmit}
+        >
+          {/* Input Field Component */}
+          {[
+            { label: "Full Name", name: "fullName", type: "text" },
+            { label: "Email", name: "email", type: "email" },
+            { label: "Phone Number", name: "phoneNumber", type: "number" },
+            { label: "Designation", name: "designation", type: "text" },
+            { label: "Company", name: "company", type: "text" },
+          ].map((field) => (
+            <div key={field.name} className="flex flex-col">
+              <label
+                htmlFor={field.name}
+                className="text-gray-700 font-semibold mb-2"
+              >
+                {field.label} <span className="text-red-500">*</span>
+              </label>
+              <input
+                id={field.name}
+                name={field.name}
+                type={field.type}
+                value={formData[field.name]}
+                onChange={handleChange}
+                required
+                className="p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 outline-none transition-all"
+              />
+            </div>
+          ))}
 
+          {/* Experience */}
           <div className="flex flex-col">
-            <label htmlFor="fullName" className="text-lg font-bold">
-              Full Name <span className="text-red-500">*</span>
-            </label>
-            <input
-              id="fullName"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              className="focus:outline-blue-300 border border-gray-500 rounded-lg p-1"
-              required
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label htmlFor="email" className="text-lg font-bold">
-              Email <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="focus:outline-blue-300 border border-gray-500 rounded-lg p-1"
-              required
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label htmlFor="phoneNumber" className="text-lg font-bold">
-              Phone Number <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="number"
-              pattern="[6789][0-9]{9}"
-              title="Please enter valid phone number"
-              id="phoneNumber"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              className="focus:outline-blue-300 border border-gray-500 rounded-lg p-1"
-              required
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label htmlFor="experience" className="text-lg font-bold">
-              Experience <span className="text-red-500">*</span>
+            <label htmlFor="experience" className="text-gray-700 font-semibold mb-2">
+              Experience (Years) <span className="text-red-500">*</span>
             </label>
             <select
-              name="experience"
               id="experience"
+              name="experience"
               value={formData.experience}
               onChange={handleChange}
-              className="focus:outline-blue-300 border border-gray-500 rounded-lg p-1"
               required
+              className="p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 outline-none transition-all"
             >
               <option value="">Select</option>
               {[...Array(20).keys()].map((num) => (
@@ -141,38 +132,40 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
             </select>
           </div>
 
+          {/* Skills */}
           <div className="flex flex-col">
-            <label htmlFor="skills" className="text-lg font-bold">
+            <label htmlFor="skills" className="text-gray-700 font-semibold mb-2">
               Skills <span className="text-red-500">*</span>
             </label>
             <input
-              type="text"
               id="skills"
               name="skills"
               value={formData.skills}
               onChange={handleChange}
-              className="focus:outline-blue-300 border border-gray-500 rounded-lg p-1"
               required
+              className="p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 outline-none transition-all"
             />
           </div>
 
-          <div className="flex flex-col">
-            <label htmlFor="address" className="text-lg font-bold">
+          {/* Address */}
+          <div className="flex flex-col md:col-span-2">
+            <label htmlFor="address" className="text-gray-700 font-semibold mb-2">
               Address <span className="text-red-500">*</span>
             </label>
-            <input
-              type="text"
+            <textarea
               id="address"
               name="address"
               value={formData.address}
               onChange={handleChange}
-              className="focus:outline-blue-300 border border-gray-500 rounded-lg p-1"
               required
-            />
+              rows="2"
+              className="p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 outline-none transition-all resize-none"
+            ></textarea>
           </div>
 
-          <div className="flex flex-col">
-            <label htmlFor="file" className="text-lg font-bold">
+          {/* Resume Upload */}
+          <div className="flex flex-col md:col-span-2">
+            <label htmlFor="file" className="text-gray-700 font-semibold mb-2">
               Resume File <span className="text-red-500">*</span>
             </label>
             <input
@@ -180,21 +173,24 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
               id="file"
               name="file"
               onChange={handleFileChange}
-              className="focus:outline-blue-300 border border-gray-500 rounded-lg p-1"
               accept="application/pdf"
               required
+              className="block w-full text-gray-700 border border-gray-300 rounded-lg p-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all"
             />
+            <p className="text-sm text-gray-500 mt-1">Only PDF files allowed</p>
           </div>
 
-          <div className="text-center mt-8 col-span-2">
-            <input
+          {/* Submit Button */}
+          <div className="md:col-span-2 flex justify-center mt-6">
+            <button
               type="submit"
-              className="p-2 bg-blue-500 font-bold text-xl text-white rounded-lg hover:bg-blue-700 cursor-pointer"
-              value="Submit"
-            />
+              className="px-10 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 shadow-md hover:shadow-lg transition-all"
+            >
+              Submit Candidate
+            </button>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

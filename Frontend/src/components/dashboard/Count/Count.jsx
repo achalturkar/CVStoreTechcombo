@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
 import React from "react";
+import Cookies from "js-cookie";
+
+
+const token = Cookies.get("jwtToken");
 
 const Count = () =>{
 
@@ -9,7 +13,14 @@ const Count = () =>{
 
     const fetchCount= async() =>{
        try{
-        const res = await fetch(`${baseUrl}/candidate/count`);
+        const res = await fetch(`${baseUrl}/candidate/count`, {
+            method: "GET",
+            headers: {
+                Authorization : `Bearer ${token}`,
+                "Content-Type":"application/json"
+
+            }
+        });
         const data = await res.json();
         setCount(data);
        }catch(err){
@@ -26,9 +37,9 @@ const Count = () =>{
 
 
     return (
-        <div className="p-4 ">
-            <h1>Total candidate</h1>
-            <h2>{count}</h2>
+        <div className="p-4  border-2 rounded-xl ">
+            <h1 className="font-semibold text-lg  ">Total candidate</h1>
+            <h2 className="font-extrabold">{count}</h2>
 
         
         </div>

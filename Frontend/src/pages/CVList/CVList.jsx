@@ -1,23 +1,12 @@
 import React from "react";
-import Navbar from "../../components/Navbar/Navbar";
-import Filter from "../../components/Filter/Filter";
-import CandidateCard from "../../components/CandidateCard/CandidateCard";
+import CandidateCard from "../../components/candidate/CandidateCard/CandidateCard";
 
-const CVList = () =>{
-
-    return(
-
-        <>
-
-        {/* <Filter/> */}
-
-
+const CVList = () => {
+  return (
+    <div className="p-4 md:p-10 bg-gray-50 min-h-screen">
         <CandidateCard/>
-        
-        
-        
-        </>
-    )
-}
+    </div>
+  );
+};
 
 export default CVList;

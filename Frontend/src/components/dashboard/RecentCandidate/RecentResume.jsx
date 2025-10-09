@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import React from "react";
+import Cookies from "js-cookie";
+
+
+const token = Cookies.get("jwtToken");
 
 const RecentResume = () => {
 
@@ -9,7 +13,12 @@ const RecentResume = () => {
 
     const fetchRecentCandidate = async () => {
         try {
-            const res = await fetch(`${baseUrl}/candidate/recent`);
+            const res = await fetch(`${baseUrl}/candidate/recent`,{
+              method:"GET",
+              headers:{
+                Authorization: `Bearer ${token}`
+              }
+            });
             const data = await res.json();
             setCandidates(data.content);
             console.log(data.content);

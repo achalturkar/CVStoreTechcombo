@@ -4,13 +4,22 @@ import {
   ComposedChart,
   Bar
 } from "recharts";
+import Cookies from "js-cookie";
 
 const ResumeUploadChart = () => {
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState("daily");
 
+  const token = Cookies.get("jwtToken");
+
+
   useEffect(() => {
-  fetch(`/api/candidate/visuals?filter=${filter}`)
+  fetch(`/candidate/visuals?filter=${filter}`,{
+    method: "GET",
+    headers:{
+      Authorization: `Bearer ${token}`
+    }
+  })
     .then((res) => res.json())
     .then((json) => {
       const formatted = (Array.isArray(json) ? json : [json]).map(item => {

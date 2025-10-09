@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 import { FaSearch } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { SearchContext } from "../../context/searchContext";
+import Cookies from "js-cookie";
 
 const SearchBar = () => {
   const [results, setResults] = useState([]);
@@ -14,6 +15,8 @@ const SearchBar = () => {
 
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
+      const token = Cookies.get("jwtToken");
+
 
   // fetch suggestions
   const fetchSuggestions = async (q) => {
@@ -25,7 +28,14 @@ const SearchBar = () => {
 
     try {
       const res = await fetch(
-        `${baseUrl}/candidate/search/filter?keyword=${encodeURIComponent(q)}`
+        `${baseUrl}/candidate/search/filter?keyword=${encodeURIComponent(q)}`,
+        {
+          method:"GET",
+          headers:{
+            Authorization: `Bearer ${token}`,
+            "Content-Type":"Application/json"
+          }
+        }
       );
       const data = await res.json();
 

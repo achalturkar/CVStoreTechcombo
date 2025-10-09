@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Pagination from "../../components/Common/Pagination/Pagination";
+import Pagination from "../../components/common/Pagination/Pagination";
 import Filter from "../../components/Filter/Filter";
 import { SearchContext } from "../../context/searchContext";
+import Cookies from "js-cookie";
 
 const SearchResult = () => {
   const [results, setResults] = useState([]);
@@ -18,6 +19,8 @@ const SearchResult = () => {
     const [submittedKeyword, setSubmittedKeyword] = useState("");
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+  const token = Cookies.get("jwtToken");
 
 
   // ✅ Sync context keyword when URL param changes
@@ -49,7 +52,14 @@ const SearchResult = () => {
 
   // ✅ Fetch candidates
   const fetchData = () => {
-    fetch(`${baseUrl}/candidate/search/filter?${queryParams}`)
+    fetch(`${baseUrl}/candidate/search/filter?${queryParams}`,
+      {
+        method:"GET",
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         setResults(data.content || []);

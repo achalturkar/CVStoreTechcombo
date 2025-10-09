@@ -1,42 +1,61 @@
-
 import React from "react";
 import { RiArrowLeftDoubleLine, RiArrowRightDoubleFill } from "react-icons/ri";
 
+const Pagination = ({ page, totalPages, onPageChange }) => {
+  if (totalPages <= 1) return null;
 
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxButtons = 5; 
+    let start = Math.max(0, page - Math.floor(maxButtons / 2));
+    let end = Math.min(totalPages, start + maxButtons);
 
-const Pagination = ({page, totalPages,onPageChange }) => {
+    if (end - start < maxButtons) start = Math.max(0, end - maxButtons);
 
+    for (let i = start; i < end; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
 
-    return (
-        <>
-            <div className="flex justify-center text-center items-center mt-4 space-x-2 bg-white rounded-xl p-2  shadow-md" >
-                <button
-                    disabled={page === 0}
-                    onClick={() => onPageChange((prev) => prev - 1)}
-                    className=" flex text-center  items-center px-3 py-1 hover:shadow-md rounded-md disabled:opacity-50 gap-1"
-                >
-                    <RiArrowLeftDoubleLine size={25}/>
+  return (
+    <div className="flex justify-center items-center gap-2 mt-6 bg-white p-3 rounded-xl shadow-md">
+      {/* Prev Button */}
+      <button
+        onClick={() => onPageChange(page - 1)}
+        disabled={page === 0}
+        className="px-3 py-1 rounded-md text-gray-700 hover:bg-gray-100 disabled:opacity-50 flex items-center gap-1"
+      >
+        <RiArrowLeftDoubleLine size={20} />
+        Prev
+      </button>
 
-                    Prev
-                </button>
-                <span>
-                    Page {page + 1} of {totalPages}
-                </span>
-                <button
-                    disabled={page + 1 >= totalPages}
-                    onClick={() => onPageChange((prev) => prev + 1)}
-                    className="flex text-center items-center px-3 py-1 hover:shadow-md gap-1 rounded-md disabled:opacity-50"
-                >
+      {/* Number Buttons */}
+      {getPageNumbers().map((num) => (
+        <button
+          key={num}
+          onClick={() => onPageChange(num)}
+          className={`px-3 py-1 rounded-md text-sm font-medium ${
+            num === page
+              ? "bg-blue-600 text-white"
+              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+          }`}
+        >
+          {num + 1}
+        </button>
+      ))}
 
-                    Next
-                    <RiArrowRightDoubleFill size={25}/>
-
-                </button>
-            </div>
-
-
-        </>
-    )
-}
+      {/* Next Button */}
+      <button
+        onClick={() => onPageChange(page + 1)}
+        disabled={page + 1 >= totalPages}
+        className="px-3 py-1 rounded-md text-gray-700 hover:bg-gray-100 disabled:opacity-50 flex items-center gap-1"
+      >
+        Next
+        <RiArrowRightDoubleFill size={20} />
+      </button>
+    </div>
+  );
+};
 
 export default Pagination;

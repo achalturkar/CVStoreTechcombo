@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { handleDownload } from "../../utils/handleDownload";
+import Cookies from "js-cookie";
+
 
 const CandidateDetail = () => {
   const { id } = useParams();
@@ -8,10 +10,18 @@ const CandidateDetail = () => {
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const navigate = useNavigate();
 
+  const token = Cookies.get("jwtToken")
+
   useEffect(() => {
     const fetchCandidate = async () => {
       try {
-        const res = await fetch(`${baseUrl}/candidate/${id}`, {method: "GET"});
+        const res = await fetch(`${baseUrl}/candidate/${id}`,
+           {method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+
+           });
         const data = await res.json();
         setCandidate(data);
       } catch (err) {

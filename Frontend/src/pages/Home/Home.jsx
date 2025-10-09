@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import UploadCandidate from "/src/components/UploadCandidate/UploadCandidate"
-import Navbar from '../../components/Navbar/Navbar';
 import Count from '../../components/dashboard/Count/Count';
 import RecentResume from '../../components/dashboard/RecentCandidate/RecentResume';
 import ResumeUploadChart from '../../components/dashboard/ResumeUploadChart/ResumeUploadChart';
+import AllUsers from '../../components/dashboard/AllUsers/AllUsers';
+import UserProfile from '../../components/UserProfile/UserProfile';
 
 const Home = () =>{
+
+
+   
 
 
     return(
@@ -15,6 +19,11 @@ const Home = () =>{
             <RecentResume/>
 
             <ResumeUploadChart/>
+
+            <UserProfile/>
+
+
+            {/* <AllUsers/> */}
         
         
         
