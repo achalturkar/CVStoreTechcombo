@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaBars, FaHome, FaSearch, FaListAlt, FaUpload, FaFileAlt } from "react-icons/fa";
 import SearchBar from "../../SearchBar/SearchBar";
-import Logout from "../../../pages/auth/Logout/Logout";
+import Logout from "../../../pages/auth/recruiter/Logout/Logout";
 import UserProfile from "../../UserProfile/UserProfile";
 
 const Navbar = () => {
@@ -12,7 +12,7 @@ const Navbar = () => {
   const toggleSidebar = () => setIsOpen(!isOpen);
 
   const menuItems = [
-    { path: "/", label: "Dashboard", icon: <FaHome /> },
+    { path: "/superadmin-dashboard", label: "Dashboard", icon: <FaHome /> },
     { path: "/searchResult", label: "Search", icon: <FaSearch /> },
     { path: "/cvlist", label: "CV List", icon: <FaListAlt /> },
     { path: "/cvupload", label: "CV Upload", icon: <FaUpload /> },
@@ -43,11 +43,11 @@ const Navbar = () => {
       {/* Sidebar + Main */}
       <div className="flex flex-1 pt-[70px]">
         <div
-          className={`hidden md:flex flex-col bg-white transition-all duration-100 ${
-            isOpen ? "w-48" : "w-16"
+          className={`hidden md:flex flex-col bg-white transition-all duration-100 border-r-2 ${
+            isOpen ? "w-44" : "w-16"
           }`}
         >
-          <ul className="flex flex-col space-y-2 mt-6">
+          <ul className="flex flex-col space-y-2  fixed">
             {menuItems.map((item) => (
               <Link
                 key={item.path}

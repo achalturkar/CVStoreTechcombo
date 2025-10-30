@@ -53,8 +53,8 @@ const CandidateCard = () => {
   }, [pageNo]);
 
   return (
-    <div className="p-4 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold mb-8 text-blue-700">
+    <div className="p-1 lg:p-2 bg-gray-50 min-h-screen">
+      <h1 className="text-3xl font-bold mb-4 text-blue-700">
         Candidate Profiles
       </h1>
 

@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -50,6 +51,9 @@ public class Users implements UserDetails {
     @Column(nullable = false)
     private Role role;
 
+    @Column(nullable = false)
+    private String companyName;
+
     private boolean enabled = true;
 
     private Instant createdAt;
@@ -57,6 +61,13 @@ public class Users implements UserDetails {
     void onCreate() {
         createdAt = Instant.now();
     }
+
+
+    //------ token------
+
+
+    private String resetToken;
+    private LocalDateTime resetTokenExpiry;
 
 
     // --- UserDetails ---

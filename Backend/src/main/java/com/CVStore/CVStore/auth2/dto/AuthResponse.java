@@ -10,5 +10,6 @@ public record AuthResponse(
         String fullName,
         String email,
         String mobile,
+        String companyName,
         Role role
 ) {}

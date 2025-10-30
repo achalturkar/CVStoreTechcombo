@@ -19,7 +19,7 @@ const Pagination = ({ page, totalPages, onPageChange }) => {
   };
 
   return (
-    <div className="flex justify-center items-center gap-2 mt-6 bg-white p-3 rounded-xl shadow-md">
+    <div className="flex justify-center items-center gap-2 mt-6 bg-white p-3 rounded-xl shadow-md mb-6">
       {/* Prev Button */}
       <button
         onClick={() => onPageChange(page - 1)}

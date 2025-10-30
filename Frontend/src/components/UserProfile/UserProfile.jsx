@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Cookies from "js-cookie";
 import { FaUserCircle } from "react-icons/fa";
-import Logout from "../../pages/auth/Logout/Logout";
+import Logout from "../../pages/auth/recruiter/Logout/Logout";
 
 const UserProfile = () => {
   const [profile, setProfile] = useState(null);
@@ -61,30 +61,34 @@ const UserProfile = () => {
       {/* Dropdown */}
       {showProfile && (
         <div
-          className="absolute right-0 mt-3 w-64 bg-white border border-gray-200 rounded-2xl shadow-lg p-4 z-50 animate-fadeIn"
+          className="absolute right-0 mt-3 w-60 bg-white border border-gray-200 rounded-2xl shadow-lg p-4 z-50 animate-fadeIn"
         >
-          <div className="text-center mb-3">
+          <div className=" flex gap-2">
+            <div className="w-1/4">
             <FaUserCircle size={48} className="mx-auto text-blue-500" />
-            <h3 className="text-lg font-semibold mt-2">{ profile.fullName }</h3>
+            </div>
+            <div className="w-3/4 ">
+            <h3 className="text-lg font-semibold">{ profile.fullName }</h3>
             <p className="text-sm text-gray-500">{profile.role }</p>
+            </div>
           </div>
 
-          <div className="text-sm text-gray-700 space-y-1">
+          <div className="text-sm text-gray-700 space-y-1 mt-2">
             <p><strong>User ID:</strong> {profile.uniqueId}</p>
             <p><strong>Email:</strong> {profile.email}</p>
             <p><strong>Mobile:</strong> {profile.mobileNumber || profile.mobile || "N/A"}</p>
           </div>
-{/* 
+
           <button
             onClick={() => {
               Cookies.remove("jwtToken");
-              window.location.href = "/login";
+              window.location.href = "/recruit/login";
             }}
             className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-3 rounded-xl transition"
           >
             Logout
-          </button> */}
-          <Logout/>
+          </button>
+          {/* <Logout/> */}
         </div>
       )}
     </div>

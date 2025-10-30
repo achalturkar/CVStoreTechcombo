@@ -2,14 +2,13 @@ package com.CVStore.CVStore.auth2.controller;
 
 
 
-import com.CVStore.CVStore.auth2.dto.AuthRequest;
-import com.CVStore.CVStore.auth2.dto.AuthResponse;
-import com.CVStore.CVStore.auth2.dto.RegisterRequest;
+import com.CVStore.CVStore.auth2.dto.*;
 import com.CVStore.CVStore.auth2.entity.Users;
 import com.CVStore.CVStore.auth2.repository.UsersRepository;
 import com.CVStore.CVStore.auth2.service.JwtService;
 import com.CVStore.CVStore.auth2.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,6 +16,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -46,6 +47,7 @@ public class AuthController {
                 saved.getFullName(),
                 saved.getEmail(),
                 saved.getMobile(),
+                saved.getCompanyName(),
                 saved.getRole()));
     }
     @PostMapping("/login")
@@ -64,6 +66,7 @@ public class AuthController {
                     principal.getFullName(),
                     principal.getEmail(),
                     principal.getMobile(),
+                    principal.getCompanyName(),
                     principal.getRole()));
         } catch (BadCredentialsException ex) {
             throw new BadCredentialsException("Invalid email or password");
@@ -80,7 +83,31 @@ public class AuthController {
                 current.getFullName(),
                 current.getEmail(),
                 current.getMobile(),
+                current.getCompanyName(),
                 current.getRole()));
     }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        try {
+            userService.forgotPassword(request.getEmail());
+            return ResponseEntity.ok(Map.of("message", "Password reset link sent to your email."));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
+        try {
+            userService.resetPassword(request.getToken(), request.getNewPassword());
+            return ResponseEntity.ok(Map.of("message", "Password has been reset successfully."));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", e.getMessage()));
+        }
+    }
+
 }
 
