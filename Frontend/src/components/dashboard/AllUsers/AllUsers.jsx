@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 
 const AllUsers = () => {
 
-    const[users , setUsers]= useState();
+    const [users, setUsers] = useState();
 
     const baseUrl = import.meta.env.VITE_API_BASE_URL;
     const token = Cookies.get("jwtToken");
@@ -27,28 +27,28 @@ const AllUsers = () => {
         }
     }
 
-      useEffect(() => {
-            fetchAllUsers();
-        }, [])
+    useEffect(() => {
+        fetchAllUsers();
+    }, [])
 
 
 
     return (
         <>
 
-        <h1>Users List</h1>
-         
-         <ul className="list-disc pl-5 space-y-1">
-        {users.length > 0 ? (
-          users.map((each) => (
-            <li key={each.id}>
-              {each.fullName} ({each.mobile})
-            </li>
-          ))
-        ) : (
-          <li>No Users found</li>
-        )}
-      </ul>
+            <h1>Users List</h1>
+
+            <ul className="list-disc pl-5 space-y-1">
+                {users.length > 0 ? (
+                    users.map((each) => (
+                        <li key={each.id}>
+                            {each.fullName} ({each.mobile})
+                        </li>
+                    ))
+                ) : (
+                    <li>No Users found</li>
+                )}
+            </ul>
 
 
 

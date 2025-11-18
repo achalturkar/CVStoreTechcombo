@@ -1,5 +1,4 @@
 import React from "react";
-import Logout from "../../auth/recruiter/Logout/Logout";
 import Navbar from "../../../components/layout/Navbar/Navbar";
 
 

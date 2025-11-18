@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Cookies from "js-cookie";
-import { FaUserCircle } from "react-icons/fa";
-import Logout from "../../pages/auth/recruiter/Logout/Logout";
+import { FaUserCircle, FaSignOutAlt, FaCog, FaBuilding, FaUserEdit, FaMoon } from "react-icons/fa";
+import { MdEmail, MdPhone, MdBadge } from "react-icons/md";
 
 const UserProfile = () => {
   const [profile, setProfile] = useState(null);
@@ -13,22 +13,16 @@ const UserProfile = () => {
 
   const fetchProfile = async () => {
     try {
-      const response = await fetch(`${baseUrl}/auth/me`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+      const res = await fetch(`${baseUrl}/auth/recruit/me`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
+      if (!res.ok) throw new Error("Failed to load profile");
 
-      const data = await response.json();
+      const data = await res.json();
       setProfile(data);
     } catch (err) {
-      console.error("Error fetching profile:", err);
+      console.error("Profile Fetch Error:", err);
     }
   };
 
@@ -38,57 +32,114 @@ const UserProfile = () => {
 
   // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setShowProfile(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
   }, []);
 
-  if (!profile) return null; 
+  if (!profile) return null;
 
   return (
-    <div className="relative inline-block text-left" ref={dropdownRef}>
+    <div className="relative inline-block" ref={dropdownRef}>
+      {/* Button (Profile Icon) */}
       <button
-        onClick={() => setShowProfile(!showProfile)}
-        className="flex items-center gap-2 text-gray-800 hover:text-blue-600 transition"
+        onClick={() => setShowProfile((prev) => !prev)}
+        className="flex items-center gap-2 text-gray-900 hover:text-blue-600 transition-all"
       >
-        <FaUserCircle size={28} />
+        <FaUserCircle size={32} />
       </button>
 
       {/* Dropdown */}
       {showProfile && (
-        <div
-          className="absolute right-0 mt-3 w-60 bg-white border border-gray-200 rounded-2xl shadow-lg p-4 z-50 animate-fadeIn"
-        >
-          <div className=" flex gap-2">
-            <div className="w-1/4">
-            <FaUserCircle size={48} className="mx-auto text-blue-500" />
-            </div>
-            <div className="w-3/4 ">
-            <h3 className="text-lg font-semibold">{ profile.fullName }</h3>
-            <p className="text-sm text-gray-500">{profile.role }</p>
+        <div className="absolute right-0 mt-4 w-80 bg-white shadow-lg  border border-gray-100 z-50 p-4 animate-fadeIn">
+
+          {/* TOP SECTION */}
+          <div className="flex gap-3 items-center pb-3 border-b">
+            <FaUserCircle size={58} className="text-blue-500" />
+
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 leading-tight">
+                {profile.fullName}
+              </h3>
+
+              <p className="text-sm text-gray-600 capitalize">{profile.role}</p>
+
+              <p className="text-[11px] text-gray-500 tracking-wide">
+                ID: {profile.uniqueId}
+              </p>
             </div>
           </div>
 
-          <div className="text-sm text-gray-700 space-y-1 mt-2">
-            <p><strong>User ID:</strong> {profile.uniqueId}</p>
-            <p><strong>Email:</strong> {profile.email}</p>
-            <p><strong>Mobile:</strong> {profile.mobileNumber || profile.mobile || "N/A"}</p>
+          {/* DETAILS */}
+          <div className="mt-3 space-y-1 text-[16px] text-gray-700">
+
+            <div className="flex items-center gap-2">
+              <MdEmail className="text-blue-600" />
+              <span>{profile.email}</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <MdPhone className="text-green-600" />
+              <span>{profile.mobile || "N/A"}</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <FaBuilding className="text-purple-600" />
+              <span>{profile.companyName || "No Company Assigned"}</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <MdBadge className="text-orange-600" />
+              <span>Recruiter Access Level: Recruit</span>
+            </div>
           </div>
 
+          {/* MENU OPTIONS */}
+          <div className="mt-2 border-t pt-2 space-y-1">
+
+            <button
+              className="flex items-center gap-2 w-full px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-800 text-sm"
+              onClick={() => (window.location.href = "/profile")}
+            >
+              <FaUserEdit /> Edit Profile
+            </button>
+
+            <button
+              className="flex items-center gap-2 w-full px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-800 text-sm"
+              onClick={() => (window.location.href = "/settings")}
+            >
+              <FaCog /> Account Settings
+            </button>
+
+            <button
+              className="flex items-center gap-2 w-full px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-800 text-sm"
+            >
+              <FaBuilding /> Company Settings
+            </button>
+
+            {/* <button
+              className="flex items-center gap-2 w-full px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-800 text-sm"
+            >
+              <FaMoon /> Theme: Dark Mode (Coming Soon)
+            </button> */}
+          </div>
+
+          {/* LOGOUT */}
           <button
             onClick={() => {
               Cookies.remove("jwtToken");
+              Cookies.remove("Role");
               window.location.href = "/recruit/login";
             }}
-            className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-3 rounded-xl transition"
+            className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-medium py-2 rounded-xl transition-all text-sm flex items-center justify-center gap-2"
           >
+            <FaSignOutAlt />
             Logout
           </button>
-          {/* <Logout/> */}
         </div>
       )}
     </div>

@@ -1,11 +1,13 @@
  import Cookies from "js-cookie";
    const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-   const token = Cookies.get("jwtToken");
+ 
 
  export const handleDownload = async (id, fullName, skills, experience) => {
     try {
-      const response = await fetch(`${baseUrl}/candidate/download/${id}`, {
+
+        const token = Cookies.get("jwtToken");
+      const response = await fetch(`${baseUrl}/resume-data/download/${id}`, {
         method: "GET",
         headers:{
           Authorization:`Bearer ${token}`

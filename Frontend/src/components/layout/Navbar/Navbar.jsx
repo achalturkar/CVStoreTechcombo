@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaBars, FaHome, FaSearch, FaListAlt, FaUpload, FaFileAlt } from "react-icons/fa";
-import SearchBar from "../../SearchBar/SearchBar";
-import Logout from "../../../pages/auth/recruiter/Logout/Logout";
+import SearchBar from "../../resumeData/SearchBar/SearchBar";
 import UserProfile from "../../UserProfile/UserProfile";
 
 const Navbar = () => {
