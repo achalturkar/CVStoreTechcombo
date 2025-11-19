@@ -130,13 +130,9 @@ public class ResumeDataService {
     }
 
 
-
-
-
     public Optional<ResumeData> searchCandidatesByFullName(String fullName) {
         return resumeDataRepository.findByFullNameContainingIgnoreCase(fullName);
     }
-
 
 
     public List<ResumeData> filterCandidates(String fullName, String phoneNumber, String skills, String address, String email) {
@@ -159,22 +155,6 @@ public class ResumeDataService {
 
 
     //-----------update candidate logic PUT Mapping-----------------
-
-//    public ResponseEntity<ResumeData> updateCandidate(Long id, ResumeData updated){
-//        Optional<ResumeData> optional = resumeDataRepository.findById(id);
-//        if (optional.isEmpty()) return ResponseEntity.notFound().build();
-//
-//        ResumeData existing = optional.get();
-//        existing.setFullName(updated.getFullName());
-//        existing.setEmail(updated.getEmail());
-//        existing.setPhoneNumber(updated.getPhoneNumber());
-//        existing.setExperience(updated.getExperience());
-//        existing.setSkills(updated.getSkills());
-//        existing.setAddress(updated.getAddress());
-//        existing.setFilePath(updated.getFilePath());
-//
-//        return ResponseEntity.ok(resumeDataRepository.save(existing));
-//    }
 
     public ResponseEntity<ResumeData> updateCandidate(Long id, ResumeData updated, MultipartFile resumeFile) {
 
@@ -344,47 +324,7 @@ public class ResumeDataService {
             return matcher.find() ? matcher.group(1).trim() : "";  // return blank if not found
         }
 
-        // -------- PHONE (Indian + International) --------
-//        public String extractPhone(String text) {
-//            if (text == null || text.isEmpty()) return "";
-//
-//            // Replace non-breaking spaces and weird characters
-//            text = text.replace('\u00A0', ' ');
-//
-//            // Regex: optional country code, digits, spaces/dashes/brackets allowed
-//            Pattern pattern = Pattern.compile(
-//                    "(\\+\\d{1,3}[\\s\\-]?)?" +   // optional country code (+1, +91 etc.)
-//                            "(?:\\d[\\d\\s\\-()]{8,}\\d)" // main number, 10+ digits with optional separators
-//            );
-//
-//            Matcher matcher = pattern.matcher(text);
-//
-//            while (matcher.find()) {
-//                String match = matcher.group().trim();
-//
-//                // Normalize multiple spaces (max 1)
-//                match = match.replaceAll("\\s{2,}", " ");
-//
-//                // Keep only digits and optional leading +
-//                String digitsOnly = match.replaceAll("[^\\d+]", "");
-//
-//                // Validate length (minimum 10 digits for local number)
-//                String cleanedNumber = digitsOnly;
-//                if (digitsOnly.startsWith("+")) {
-//                    // Keep country code + number
-//                    cleanedNumber = digitsOnly;
-//                } else if (digitsOnly.length() >= 10) {
-//                    // Fallback to last 10 digits
-//                    cleanedNumber = digitsOnly.substring(digitsOnly.length() - 10);
-//                } else {
-//                    continue; // too short, skip
-//                }
-//
-//                return cleanedNumber;
-//            }
-//
-//            return ""; // no valid phone found
-//        }
+
 
     public static String extractPhone(String text) {
         // 1. Initial check for empty or null input.
@@ -790,10 +730,6 @@ public class ResumeDataService {
 
             return finalResponse;
         }
-
-
-
-
 
 
 }

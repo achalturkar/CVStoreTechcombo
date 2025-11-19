@@ -10,26 +10,32 @@ services:
       - .env
     ports:
       - "8080:8080"
-    depends_on:
-      - postgres
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+      - TZ: "Asia/Kolkata"
+      
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres:16
     container_name: CVStoretechcombo-postgres
+
     environment:
       POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
       POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       POSTGRES_DB: cvstore
+
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+      - ./postgres-backups:/var/backups
+
     ports:
       - "5433:5432"
-  
 
+    restart: always
   
-
 
 volumes:
   postgres_data:

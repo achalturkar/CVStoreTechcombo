@@ -279,10 +279,13 @@ public class ResumeDataController {
     //----------DELETE Mapping----------
 
     //Delete candidate by Using Id
+
     @DeleteMapping("/delete/{id}")
     public void deleteCandidate(@PathVariable long id) {
          resumeDataService.deleteCandidate(id);
     }
+
+
 
 
 
