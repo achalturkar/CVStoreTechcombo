@@ -9,7 +9,7 @@ import {
   FaArrowUp,
   FaExclamationTriangle,
 } from "react-icons/fa";
-import BackToTop from "../../common/BackToTop/BackToTp";
+import BackToTop from "..//../layout/BackToTop/BackToTop.jsx";
 
 const MAX_FILES = 500;
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
