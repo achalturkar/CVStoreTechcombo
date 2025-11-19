@@ -6,7 +6,7 @@ import { resumeApi } from "../../../api/resumeApi";
 import Pagination from "../../../components/common/Pagination/Pagination";
 import FilterSummary from "../../../components/advancedFilter/FilterSummary/FilterSummary";
 import CandidateCard from "../../../components/CandidateCard/CandidateCard";
-import BackToTop from "../../../components/common/BackToTop/BackToTp";
+import BackToTop from "../../../components/common/BackToTop/BackToTop"
 
 
 
