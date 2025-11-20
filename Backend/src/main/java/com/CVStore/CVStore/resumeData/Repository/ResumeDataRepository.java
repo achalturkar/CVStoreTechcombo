@@ -26,8 +26,6 @@ public interface ResumeDataRepository extends JpaRepository<ResumeData, Long>, J
 
     Optional<ResumeData> findByFullNameContainingIgnoreCase(String fullName);
 
-    List<ResumeData> findAll();
-
 //    Page<Candidate> allList(Pageable pageable);
 
     long countBySkillsContainingIgnoreCase(String skill);

@@ -57,7 +57,6 @@ public class ResumeDataController {
     public ResponseEntity<?> search(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Integer experience,
             @RequestParam(required = false) List<String> company,
@@ -78,6 +77,7 @@ public class ResumeDataController {
 
         return ResponseEntity.ok(result);
     }
+
 
 
     //single resume upload manually

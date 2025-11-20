@@ -16,18 +16,16 @@ public class ResumeSpecification {
 
             List<Predicate> predicates = new ArrayList<>();
 
-            // -----------------------------------------
-            // MULTI-WORD KEYWORD SEARCH  (Resdex Style)
-            // -----------------------------------------
-            if (req.getKeyword() != null && !req.getKeyword().isEmpty()) {
+            // ===========================================
+            // 1. KEYWORD SEARCH (LIKE NAUKRI RESDEX)
+            // ===========================================
+            if (req.getKeyword() != null && !req.getKeyword().isBlank()) {
 
                 String[] words = req.getKeyword().toLowerCase().split("\\s+");
-
                 List<Predicate> multiWordPredicates = new ArrayList<>();
 
-                for (String word : words) {
-
-                    String likeWord = "%" + word + "%";
+                for (String w : words) {
+                    String likeWord = "%" + w + "%";
 
                     multiWordPredicates.add(
                             cb.or(
@@ -43,83 +41,84 @@ public class ResumeSpecification {
                     );
                 }
 
-                // AND → all keywords must match
                 predicates.add(cb.and(multiWordPredicates.toArray(new Predicate[0])));
             }
 
-            // -----------------------------------------
-            // SKILLS FILTER (MULTI)
-            // -----------------------------------------
-            if (req.getSkills() != null && !req.getSkills().isEmpty()) {
-                List<Predicate> skillPredicates = new ArrayList<>();
-
-                for (String skill : req.getSkills()) {
-                    skillPredicates.add(
-                            cb.like(cb.lower(root.get("skills")), "%" + skill.toLowerCase() + "%")
-                    );
-                }
-
-                predicates.add(cb.or(skillPredicates.toArray(new Predicate[0])));
+            // ===========================================
+            // 2. EXPERIENCE FILTER
+            // ===========================================
+            if (req.getExperience() != null) {
+                predicates.add(
+                        cb.like(
+                                cb.lower(root.get("experience")),
+                                "%" + req.getExperience().toString().toLowerCase() + "%"
+                        )
+                );
             }
 
-            // -----------------------------------------
-            // COMPANY FILTER (LIKE)
-            // -----------------------------------------
-            if (req.getCompanies() != null && !req.getCompanies().isEmpty()) {
-                List<Predicate> companyPredicates = new ArrayList<>();
+            // ===========================================
+            // 3. SKILLS (MULTIPLE)
+            // ===========================================
+            if (req.getSkills() != null && !req.getSkills().isEmpty()) {
+                List<Predicate> skillPred = new ArrayList<>();
+                for (String s : req.getSkills()) {
+                    skillPred.add(
+                            cb.like(cb.lower(root.get("skills")), "%" + s.toLowerCase() + "%")
+                    );
+                }
+                predicates.add(cb.or(skillPred.toArray(new Predicate[0])));
+            }
 
+            // ===========================================
+            // 4. COMPANY
+            // ===========================================
+            if (req.getCompanies() != null && !req.getCompanies().isEmpty()) {
+                List<Predicate> list = new ArrayList<>();
                 for (String c : req.getCompanies()) {
-                    companyPredicates.add(
+                    list.add(
                             cb.like(cb.lower(root.get("company")), "%" + c.toLowerCase() + "%")
                     );
                 }
-
-                predicates.add(cb.or(companyPredicates.toArray(new Predicate[0])));
+                predicates.add(cb.or(list.toArray(new Predicate[0])));
             }
 
-            // -----------------------------------------
-            // DESIGNATION FILTER (LIKE)
-            // -----------------------------------------
+            // ===========================================
+            // 5. DESIGNATION
+            // ===========================================
             if (req.getDesignations() != null && !req.getDesignations().isEmpty()) {
-                List<Predicate> designationPredicates = new ArrayList<>();
-
+                List<Predicate> list = new ArrayList<>();
                 for (String d : req.getDesignations()) {
-                    designationPredicates.add(
+                    list.add(
                             cb.like(cb.lower(root.get("designation")), "%" + d.toLowerCase() + "%")
                     );
                 }
-
-                predicates.add(cb.or(designationPredicates.toArray(new Predicate[0])));
+                predicates.add(cb.or(list.toArray(new Predicate[0])));
             }
 
-            // -----------------------------------------
-            // EDUCATION FILTER (LIKE)
-            // -----------------------------------------
+            // ===========================================
+            // 6. EDUCATION
+            // ===========================================
             if (req.getEducations() != null && !req.getEducations().isEmpty()) {
-                List<Predicate> educationPredicates = new ArrayList<>();
-
+                List<Predicate> list = new ArrayList<>();
                 for (String e : req.getEducations()) {
-                    educationPredicates.add(
+                    list.add(
                             cb.like(cb.lower(root.get("education")), "%" + e.toLowerCase() + "%")
                     );
                 }
-
-                predicates.add(cb.or(educationPredicates.toArray(new Predicate[0])));
+                predicates.add(cb.or(list.toArray(new Predicate[0])));
             }
 
-            // -----------------------------------------
-            // LOCATION FILTER (LIKE)
-            // -----------------------------------------
+            // ===========================================
+            // 7. LOCATION
+            // ===========================================
             if (req.getLocations() != null && !req.getLocations().isEmpty()) {
-                List<Predicate> locationPredicates = new ArrayList<>();
-
+                List<Predicate> list = new ArrayList<>();
                 for (String l : req.getLocations()) {
-                    locationPredicates.add(
+                    list.add(
                             cb.like(cb.lower(root.get("address")), "%" + l.toLowerCase() + "%")
                     );
                 }
-
-                predicates.add(cb.or(locationPredicates.toArray(new Predicate[0])));
+                predicates.add(cb.or(list.toArray(new Predicate[0])));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));
