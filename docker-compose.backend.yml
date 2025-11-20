@@ -13,6 +13,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - TZ: "Asia/Kolkata"
+    volumes:
+      - /home/ubuntu/uploads:/app/uploads
       
     depends_on:
       - postgres
