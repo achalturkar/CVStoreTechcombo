@@ -53,9 +53,12 @@ const HrDashboard = () => {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A020F0"];
 
   return (
-    <div className="p-6">
+    <div className="p-8">
+      <div>
+        <h1 className="font-bold text-lg">Welcome {}</h1> 
+      </div>
       {/* Top Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 mt-2">
         <div className="bg-white border rounded-lg p-5 shadow">
           <h2 className="text-gray-700 text-sm font-medium">Total Resumes</h2>
           <p className="text-3xl font-bold mt-2">{totalResumes}</p>
