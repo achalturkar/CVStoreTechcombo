@@ -17,7 +17,7 @@ import {
 const HrDashboard = () => {
   const [totalResumes, setTotalResumes] = useState(0); // API Value
   const parsedResumes = 0; // Static
-  const pending = totalResumes - parsedResumes;
+  const pending = 0;
 
     const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
