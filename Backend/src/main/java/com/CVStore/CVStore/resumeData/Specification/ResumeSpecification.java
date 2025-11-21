@@ -16,37 +16,49 @@ public class ResumeSpecification {
 
             List<Predicate> predicates = new ArrayList<>();
 
+
             // ===========================================
-            // 1. KEYWORD SEARCH (LIKE NAUKRI RESDEX)
+            // 1. KEYWORD SEARCH (Best Performance)
             // ===========================================
             if (req.getKeyword() != null && !req.getKeyword().isBlank()) {
 
                 String[] words = req.getKeyword().toLowerCase().split("\\s+");
-                List<Predicate> multiWordPredicates = new ArrayList<>();
+                List<Predicate> keywordPredicates = new ArrayList<>();
 
                 for (String w : words) {
-                    String likeWord = "%" + w + "%";
+                    String like = "%" + w + "%";
 
-                    multiWordPredicates.add(
+                    keywordPredicates.add(
                             cb.or(
-                                    cb.like(cb.lower(root.get("fullName")), likeWord),
-                                    cb.like(cb.lower(root.get("skills")), likeWord),
-                                    cb.like(cb.lower(root.get("company")), likeWord),
-                                    cb.like(cb.lower(root.get("designation")), likeWord),
-                                    cb.like(cb.lower(root.get("education")), likeWord),
-                                    cb.like(cb.lower(root.get("address")), likeWord),
-                                    cb.like(cb.lower(root.get("experience")), likeWord),
-                                    cb.like(cb.lower(root.get("email")), likeWord)
+                                    cb.like(cb.lower(root.get("fullName")), like),
+                                    cb.like(cb.lower(root.get("skills")), like),
+                                    cb.like(cb.lower(root.get("company")), like),
+                                    cb.like(cb.lower(root.get("designation")), like),
+                                    cb.like(cb.lower(root.get("education")), like),
+                                    cb.like(cb.lower(root.get("address")), like),
+                                    cb.like(cb.lower(root.get("email")), like),
+                                    cb.like(cb.lower(root.get("experience")), like)
                             )
                     );
                 }
 
-                predicates.add(cb.and(multiWordPredicates.toArray(new Predicate[0])));
+                // ANY keyword match
+                predicates.add(cb.or(keywordPredicates.toArray(new Predicate[0])));
             }
 
+
             // ===========================================
-            // 2. EXPERIENCE FILTER
+            // 2. EXPERIENCE (String field)
             // ===========================================
+//            if (req.getExperience() != null && !req.getExperience().isBlank()) {
+//                predicates.add(
+//                        cb.like(
+//                                cb.lower(root.get("experience")),
+//                                "%" + req.getExperience().toLowerCase() + "%"
+//                        )
+//                );
+//            }
+
             if (req.getExperience() != null) {
                 predicates.add(
                         cb.like(
@@ -56,72 +68,179 @@ public class ResumeSpecification {
                 );
             }
 
+
             // ===========================================
-            // 3. SKILLS (MULTIPLE)
+            // 3. SKILLS MULTIPLE
             // ===========================================
             if (req.getSkills() != null && !req.getSkills().isEmpty()) {
                 List<Predicate> skillPred = new ArrayList<>();
                 for (String s : req.getSkills()) {
-                    skillPred.add(
-                            cb.like(cb.lower(root.get("skills")), "%" + s.toLowerCase() + "%")
-                    );
+                    skillPred.add(cb.like(cb.lower(root.get("skills")), "%" + s.toLowerCase() + "%"));
                 }
                 predicates.add(cb.or(skillPred.toArray(new Predicate[0])));
             }
 
-            // ===========================================
-            // 4. COMPANY
-            // ===========================================
+
+            // COMPANY
             if (req.getCompanies() != null && !req.getCompanies().isEmpty()) {
-                List<Predicate> list = new ArrayList<>();
+                List<Predicate> cList = new ArrayList<>();
                 for (String c : req.getCompanies()) {
-                    list.add(
-                            cb.like(cb.lower(root.get("company")), "%" + c.toLowerCase() + "%")
-                    );
+                    cList.add(cb.like(cb.lower(root.get("company")), "%" + c.toLowerCase() + "%"));
                 }
-                predicates.add(cb.or(list.toArray(new Predicate[0])));
+                predicates.add(cb.or(cList.toArray(new Predicate[0])));
             }
 
-            // ===========================================
-            // 5. DESIGNATION
-            // ===========================================
+
+            // DESIGNATION
             if (req.getDesignations() != null && !req.getDesignations().isEmpty()) {
                 List<Predicate> list = new ArrayList<>();
                 for (String d : req.getDesignations()) {
-                    list.add(
-                            cb.like(cb.lower(root.get("designation")), "%" + d.toLowerCase() + "%")
-                    );
+                    list.add(cb.like(cb.lower(root.get("designation")), "%" + d.toLowerCase() + "%"));
                 }
                 predicates.add(cb.or(list.toArray(new Predicate[0])));
             }
 
-            // ===========================================
-            // 6. EDUCATION
-            // ===========================================
+
+            // EDUCATION
             if (req.getEducations() != null && !req.getEducations().isEmpty()) {
                 List<Predicate> list = new ArrayList<>();
                 for (String e : req.getEducations()) {
-                    list.add(
-                            cb.like(cb.lower(root.get("education")), "%" + e.toLowerCase() + "%")
-                    );
+                    list.add(cb.like(cb.lower(root.get("education")), "%" + e.toLowerCase() + "%"));
                 }
                 predicates.add(cb.or(list.toArray(new Predicate[0])));
             }
 
-            // ===========================================
-            // 7. LOCATION
-            // ===========================================
+
+            // LOCATION
             if (req.getLocations() != null && !req.getLocations().isEmpty()) {
                 List<Predicate> list = new ArrayList<>();
                 for (String l : req.getLocations()) {
-                    list.add(
-                            cb.like(cb.lower(root.get("address")), "%" + l.toLowerCase() + "%")
-                    );
+                    list.add(cb.like(cb.lower(root.get("address")), "%" + l.toLowerCase() + "%"));
                 }
                 predicates.add(cb.or(list.toArray(new Predicate[0])));
             }
+
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
 }
+
+
+//public class ResumeSpecification {
+//
+//    public static Specification<ResumeData> filter(ResumeFilterRequest req) {
+//
+//        return (root, query, cb) -> {
+//
+//            List<Predicate> predicates = new ArrayList<>();
+//
+//            // ===========================================
+//            // 1. KEYWORD SEARCH (LIKE NAUKRI RESDEX)
+//            // ===========================================
+//            if (req.getKeyword() != null && !req.getKeyword().isBlank()) {
+//
+//                String[] words = req.getKeyword().toLowerCase().split("\\s+");
+//                List<Predicate> multiWordPredicates = new ArrayList<>();
+//
+//                for (String w : words) {
+//                    String likeWord = "%" + w + "%";
+//
+//                    multiWordPredicates.add(
+//                            cb.or(
+//                                    cb.like(cb.lower(root.get("fullName")), likeWord),
+//                                    cb.like(cb.lower(root.get("skills")), likeWord),
+//                                    cb.like(cb.lower(root.get("company")), likeWord),
+//                                    cb.like(cb.lower(root.get("designation")), likeWord),
+//                                    cb.like(cb.lower(root.get("education")), likeWord),
+//                                    cb.like(cb.lower(root.get("address")), likeWord),
+//                                    cb.like(cb.lower(root.get("experience")), likeWord),
+//                                    cb.like(cb.lower(root.get("email")), likeWord)
+//                            )
+//                    );
+//                }
+//
+//                predicates.add(cb.and(multiWordPredicates.toArray(new Predicate[0])));
+//            }
+//
+//            // ===========================================
+//            // 2. EXPERIENCE FILTER
+//            // ===========================================
+//            if (req.getExperience() != null) {
+//                predicates.add(
+//                        cb.like(
+//                                cb.lower(root.get("experience")),
+//                                "%" + req.getExperience().toString().toLowerCase() + "%"
+//                        )
+//                );
+//            }
+//
+//            // ===========================================
+//            // 3. SKILLS (MULTIPLE)
+//            // ===========================================
+//            if (req.getSkills() != null && !req.getSkills().isEmpty()) {
+//                List<Predicate> skillPred = new ArrayList<>();
+//                for (String s : req.getSkills()) {
+//                    skillPred.add(
+//                            cb.like(cb.lower(root.get("skills")), "%" + s.toLowerCase() + "%")
+//                    );
+//                }
+//                predicates.add(cb.or(skillPred.toArray(new Predicate[0])));
+//            }
+//
+//            // ===========================================
+//            // 4. COMPANY
+//            // ===========================================
+//            if (req.getCompanies() != null && !req.getCompanies().isEmpty()) {
+//                List<Predicate> list = new ArrayList<>();
+//                for (String c : req.getCompanies()) {
+//                    list.add(
+//                            cb.like(cb.lower(root.get("company")), "%" + c.toLowerCase() + "%")
+//                    );
+//                }
+//                predicates.add(cb.or(list.toArray(new Predicate[0])));
+//            }
+//
+//            // ===========================================
+//            // 5. DESIGNATION
+//            // ===========================================
+//            if (req.getDesignations() != null && !req.getDesignations().isEmpty()) {
+//                List<Predicate> list = new ArrayList<>();
+//                for (String d : req.getDesignations()) {
+//                    list.add(
+//                            cb.like(cb.lower(root.get("designation")), "%" + d.toLowerCase() + "%")
+//                    );
+//                }
+//                predicates.add(cb.or(list.toArray(new Predicate[0])));
+//            }
+//
+//            // ===========================================
+//            // 6. EDUCATION
+//            // ===========================================
+//            if (req.getEducations() != null && !req.getEducations().isEmpty()) {
+//                List<Predicate> list = new ArrayList<>();
+//                for (String e : req.getEducations()) {
+//                    list.add(
+//                            cb.like(cb.lower(root.get("education")), "%" + e.toLowerCase() + "%")
+//                    );
+//                }
+//                predicates.add(cb.or(list.toArray(new Predicate[0])));
+//            }
+//
+//            // ===========================================
+//            // 7. LOCATION
+//            // ===========================================
+//            if (req.getLocations() != null && !req.getLocations().isEmpty()) {
+//                List<Predicate> list = new ArrayList<>();
+//                for (String l : req.getLocations()) {
+//                    list.add(
+//                            cb.like(cb.lower(root.get("address")), "%" + l.toLowerCase() + "%")
+//                    );
+//                }
+//                predicates.add(cb.or(list.toArray(new Predicate[0])));
+//            }
+//
+//            return cb.and(predicates.toArray(new Predicate[0]));
+//        };
+//    }
+//}
