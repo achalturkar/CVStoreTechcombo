@@ -14,7 +14,7 @@ import { MdPostAdd } from "react-icons/md";
 
 
 
-// import SearchBar from "../../../resumeData/SearchBar/SearchBar";
+import SearchBar from "../../../resumeData/SearchBar/SearchBar";
 import UserProfile from "../../../UserProfile/UserProfile";
 import { HiOutlineDocumentText } from "react-icons/hi";
 
@@ -65,9 +65,9 @@ const HrNavbar = () => {
         </div>
 
         {/* Search center (hidden on small screens) */}
-        {/* <div className="flex-1 hidden md:flex justify-center px-6">
+        <div className="flex-1 hidden md:flex justify-center px-6">
           <SearchBar />
-        </div> */}
+        </div>
 
         {/* Right items */}
         <div className="flex items-center gap-3 ml-auto">
