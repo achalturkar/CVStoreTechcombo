@@ -36,6 +36,7 @@ import EmployerProtectedRoute from "../ProtectedRoute/EmployerProtectedRoute/Emp
 import PublicRoute from "../PublicRoute";
 import LoginWithOtp from "../../pages/employer/auth/LoginWithOtp/LoginWithOtp";
 import OtpVerify from "../../pages/employer/auth/OtpVerify/OtpVerify";
+import OtpVerify from "../../pages/employer/auth/EmailVerify/EmailVerify";
 import ResumeSearchPage from "../../pages/resumeData/ResumeSearchPage/ResumeSearchPage";
 import FilteredCandidatesPage from "../../pages/resumeData/FilteredCandidatesPage/FilteredCandidatesPage";
 import CandidateDetailsPage from "../../pages/resumeData/CandidateDetailsPage/CandidateDetailsPage";
@@ -55,6 +56,7 @@ const AppRoutes = () => (
       <Route path="/recruit/register" element={<Register />} />
       <Route path="/recruit/forget" element={<Forget />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
+      <Route path="/recruit/email-verify" element={<EmailVerify />}></Route>
 
       <Route path="/recruit/login/otp" element={<LoginWithOtp/>} />
 <Route path="/recruit/verify-otp" element={<OtpVerify/>} />
