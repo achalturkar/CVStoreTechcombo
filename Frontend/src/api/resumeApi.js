@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const API = "http://localhost:8080/api/resume-data/search";
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+
+const API = `${baseUrl}/resume-data/search`;
 
 export const resumeApi = async (params) => {
   const queryParams = new URLSearchParams();

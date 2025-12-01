@@ -6,10 +6,12 @@ import com.CVStore.CVStore.employer.dto.*;
 import com.CVStore.CVStore.employer.entity.Users;
 import com.CVStore.CVStore.employer.repository.UsersRepository;
 import com.CVStore.CVStore.auth.jwt.service.JwtService;
+import com.CVStore.CVStore.employer.service.OtpService;
 import com.CVStore.CVStore.employer.service.UserOtpLoginService;
 import com.CVStore.CVStore.employer.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,9 @@ public class EmployerAuthController {
     private final UsersRepository usersRepository;
 
     private final UserOtpLoginService userOtpLoginService;
+
+    @Autowired
+    private OtpService otpService;
 
 
     @PostMapping("/register")
@@ -144,6 +149,23 @@ public class EmployerAuthController {
                 "token", token,
                 "role", user.getRole()
         ));
+    }
+
+    @PostMapping("/send-email-otp")
+    public ResponseEntity<?> sendOtp(@RequestParam String email) {
+        otpService.sendOtpEmail(email);
+        return ResponseEntity.ok("OTP sent to email: " + email);
+    }
+
+    @PostMapping("/verify-email-otp")
+    public ResponseEntity<?> verifyOtp(@RequestParam String email, @RequestParam String otp) {
+        boolean verified = otpService.verifyOtp(email, otp);
+
+        if (verified) {
+            return ResponseEntity.ok("Email verified successfully!");
+        } else {
+            return ResponseEntity.status(400).body("Invalid OTP");
+        }
     }
 
 

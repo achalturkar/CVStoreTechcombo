@@ -36,12 +36,6 @@ public interface ResumeDataRepository extends JpaRepository<ResumeData, Long>, J
 
 
 
-
-
-
-
-
-
     @Query(value = "SELECT DATE(created_date) AS date, COUNT(*) AS count " +
             "FROM ResumeData GROUP BY DATE(created_date) ORDER BY date ASC",
             nativeQuery = true)
@@ -135,13 +129,5 @@ public interface ResumeDataRepository extends JpaRepository<ResumeData, Long>, J
             @Param("address") String address,
             Pageable pageable
     );
-
-
-
-
-
-
-
-
 
 }
