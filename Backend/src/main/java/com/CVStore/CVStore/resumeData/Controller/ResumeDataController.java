@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -93,30 +94,6 @@ public class ResumeDataController {
     ) {
         return resumeDataService.saveCandidate(file, fullName, phoneNumber, email, experience, address, skills, uploadDir);
     }
-
-
-
-//    @PostMapping("/parse-multiple-resumes")
-//    public ResponseEntity<?> parseResume(@RequestParam("files") MultipartFile[] files) {
-//        try {
-//            if (files == null || files.length == 0) {
-//                return ResponseEntity.badRequest().body(Map.of("error", "No file uploaded."));
-//            }
-//            if (files.length > 500) {
-//                return ResponseEntity.badRequest().body(Map.of("error", "Maximum 100 files allowed."));
-//            }
-//
-//            List<Map<String, String>> result = resumeDataService.parseMultipleResumes(files, uploadDir);
-//
-//            return ResponseEntity.ok(result);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body(Map.of("error", e.getMessage()));
-//        }
-//    }
-//
-//
 
 
     @PostMapping("/parse-multiple-resumes")
@@ -286,7 +263,27 @@ public class ResumeDataController {
     }
 
 
+    @GetMapping("/range")
+    public List<ResumeData> getByDateRange(
+            @RequestParam String startDate,
+            @RequestParam String endDate
+    ) {
+        LocalDateTime start = LocalDateTime.parse(startDate.replace(" ", "T"));
+        LocalDateTime end = LocalDateTime.parse(endDate.replace(" ", "T"));
+        return resumeDataService.getByDateRange(start, end);
+    }
 
+    @DeleteMapping("/range")
+    public String deleteByDateRange(
+            @RequestParam String startDate,
+            @RequestParam String endDate
+    ) {
+        LocalDateTime start = LocalDateTime.parse(startDate.replace(" ", "T"));
+        LocalDateTime end = LocalDateTime.parse(endDate.replace(" ", "T"));
+
+        int deletedCount = resumeDataService.deleteByDateRange(start, end);
+        return deletedCount + " resumes deleted successfully.";
+    }
 
 
 

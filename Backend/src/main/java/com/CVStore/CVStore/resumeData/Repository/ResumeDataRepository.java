@@ -2,13 +2,16 @@ package com.CVStore.CVStore.resumeData.Repository;
 
 import com.CVStore.CVStore.resumeData.Dto.UploadSummary;
 import com.CVStore.CVStore.resumeData.Entity.ResumeData;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +36,15 @@ public interface ResumeDataRepository extends JpaRepository<ResumeData, Long>, J
     boolean existsByFileHash(String fileHash);
 
     boolean existsByEmailIgnoreCase(String email);
+
+    @Query("SELECT r FROM ResumeData r WHERE r.createdDate BETWEEN :start AND :end")
+    List<ResumeData> findByDateRange(LocalDateTime start, LocalDateTime end);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM ResumeData r WHERE r.createdDate BETWEEN :start AND :end")
+    int deleteByDateRange(LocalDateTime start, LocalDateTime end);
+
 
 
 

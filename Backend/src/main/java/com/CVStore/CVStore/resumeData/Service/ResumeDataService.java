@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -535,6 +536,16 @@ public class ResumeDataService {
         }
     }
 
+
+    //
+
+    public List<ResumeData> getByDateRange(LocalDateTime start, LocalDateTime end) {
+        return resumeDataRepository.findByDateRange(start, end);
+    }
+
+    public int deleteByDateRange(LocalDateTime start, LocalDateTime end) {
+        return resumeDataRepository.deleteByDateRange(start, end);
+    }
 
 
     //visuals

@@ -41,6 +41,8 @@ import ResumeSearchPage from "../../pages/resumeData/ResumeSearchPage/ResumeSear
 import FilteredCandidatesPage from "../../pages/resumeData/FilteredCandidatesPage/FilteredCandidatesPage";
 import CandidateDetailsPage from "../../pages/resumeData/CandidateDetailsPage/CandidateDetailsPage";
 import JobPost from "../../pages/jobs/JobPost";
+import DeleteCandidates from "../../pages/resumeData/DeleteCandidate/DeleteCandidates";
+import CandidateTimeRange from "../../pages/resumeData/CandidateTimeRange/CandidateTimeRange";
 
 const AppRoutes = () => (
   <Routes>
@@ -96,10 +98,11 @@ const AppRoutes = () => (
         <Route path="/fileupload" element={<ResumeUpload />} />
         <Route path="/cvlist" element={<CVList />} />
         <Route path="/job-post" element={<JobPost/>} />
-
+        <Route path="/hardtocome/delete" element={<DeleteCandidates/>}/>
         <Route path="/search" element={<ResumeSearchPage/>} />
         <Route path="/filtered" element={<FilteredCandidatesPage />} />
         <Route path="/candidateDetail/:id" element={<CandidateDetailsPage/>} />
+        <Route path="/candidateTimerange" element={<CandidateTimeRange/>} />
       </Route>
     </Route>
 

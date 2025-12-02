@@ -46,7 +46,6 @@ public class Candidate implements UserDetails {
     @JsonManagedReference
     private Set<CandidateSkill> candidateSkills = new HashSet<>();
 
-
     @OneToOne(mappedBy = "candidate", cascade = CascadeType.ALL)
     private ProfileImage profileImage;
 
