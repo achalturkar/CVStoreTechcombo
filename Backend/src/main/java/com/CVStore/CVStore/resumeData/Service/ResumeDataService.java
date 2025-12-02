@@ -29,11 +29,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.CVStore.CVStore.resumeData.Service.NameExtractor.extractName;
+
 @Service
 public class ResumeDataService {
 
     @Autowired
     public ResumeDataRepository resumeDataRepository;
+
+
 
     // Upload Candidate and Save
     public ResponseEntity<?> saveCandidate(MultipartFile file, String fullName, String phoneNumber, String email,
@@ -195,107 +199,6 @@ public class ResumeDataService {
     }
 
 
-
-// -----------Parsing Multiple file Using Loop---------
-
-//    public List<Map<String, String>> parseMultipleResumes(MultipartFile[] files, String uploadDir) {
-//        List<Map<String, String>> allExtractedData = new ArrayList<>();
-//        List<ResumeData> candidatesToSave = new ArrayList<>();
-//
-//        for (MultipartFile file : files) {
-//            try {
-//                // 1. Extract text
-//                String text = extractTextFromFile(file);
-//
-//                // 2. Extract important fields
-//                String email = extractEmail(text);
-//                String phone = extractPhone(text);
-//
-//                // ⚡ Skip if email is null/empty
-//                if (email == null || email.trim().isEmpty()) {
-//                    Map<String, String> errorData = new HashMap<>();
-//                    errorData.put("fileName", file.getOriginalFilename());
-//                    errorData.put("status", "skipped");
-//                    errorData.put("message", "No valid email found in resume");
-//                    allExtractedData.add(errorData);
-//                    continue;
-//                }
-//
-//                // 3. Check for duplicates (DB + current batch)
-//                boolean alreadyExistsInDb =
-//                        resumeDataRepository.existsByEmail(email) ||
-//                                (phone != null && resumeDataRepository.existsByPhoneNumber(phone));
-//
-//                boolean alreadyExistsInBatch =
-//                        candidatesToSave.stream().anyMatch(c -> c.getEmail().equalsIgnoreCase(email));
-//
-//                if (alreadyExistsInDb || alreadyExistsInBatch) {
-//                    Map<String, String> duplicateData = new HashMap<>();
-//                    duplicateData.put("fileName", file.getOriginalFilename());
-//                    duplicateData.put("email", email);
-//                    duplicateData.put("phoneNumber", phone != null ? phone : "N/A");
-//                    duplicateData.put("status", "duplicate");
-//                    duplicateData.put("message", "Candidate already exists (duplicate)");
-//                    allExtractedData.add(duplicateData);
-//                    continue;
-//                }
-//
-//                // 4. Save file on disk
-//                String fileName = file.getOriginalFilename();
-//                Path uploadPath = Paths.get(uploadDir);
-//                Files.createDirectories(uploadPath);
-//
-//                Path filePath = uploadPath.resolve(fileName);
-//                Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-//
-//                // 5. Prepare extracted data map
-//                Map<String, String> extractedData = new HashMap<>();
-//                extractedData.put("fullName", extractName(text));
-//                extractedData.put("email", email);
-//                extractedData.put("phoneNumber", phone);
-//                extractedData.put("skills", extractSkills(text));
-//                extractedData.put("address", extractAddress(text));
-//                extractedData.put("experience", extractExperience(text));
-//                extractedData.put("designation", extractDesignation(text));
-//                extractedData.put("company", extractCompany(text));
-//                extractedData.put("education", extractEducation(text));
-//                extractedData.put("filePath", filePath.toString());
-//                extractedData.put("status", "saved");
-//                allExtractedData.add(extractedData);
-//
-//                // 6. Create Candidate entity
-//                ResumeData resumeData = new ResumeData();
-//                resumeData.setFullName(extractedData.get("fullName"));
-//                resumeData.setEmail(email);
-//                resumeData.setPhoneNumber(phone);
-//                resumeData.setSkills(extractedData.get("skills"));
-//                resumeData.setAddress(extractedData.get("address"));
-//                resumeData.setExperience(extractedData.get("experience"));
-//                resumeData.setCompany(extractedData.get("company"));
-//                resumeData.setDesignation(extractedData.get("designation"));
-//                resumeData.setEducation(extractedData.get("education"));
-//                resumeData.setFilePath(filePath.toString());
-//
-//                candidatesToSave.add(resumeData);
-//
-//            } catch (Exception e) {
-//                Map<String, String> errorData = new HashMap<>();
-//                errorData.put("fileName", file.getOriginalFilename());
-//                errorData.put("error", e.getMessage());
-//                errorData.put("status", "error");
-//                allExtractedData.add(errorData);
-//            }
-//        }
-//
-//        // 7. Bulk save only new candidates
-//        if (!candidatesToSave.isEmpty()) {
-//            resumeDataRepository.saveAll(candidatesToSave);
-//        }
-//
-//        return allExtractedData;
-//    }
-
-
     //---------------Parsing Logic  Regex Logic-------------------
 
 
@@ -381,20 +284,45 @@ public class ResumeDataService {
 
 
     // -------- NAME --------
-    public String extractName(String text) {
-        String[] lines = text.split("\\n");
-        for (String line : lines) {
-            // Looks for a line starting with "Name:", case-insensitive
-            if (line.matches("(?i)name[:\\s]*[A-Za-z\\s]{3,}")) {
-                // Removes the "Name:" part and returns the rest
-                return line.replaceAll("(?i)name[:\\s]*", "").trim();
-            }
-        }
-        // If no line with "Name:" is found, it just returns the first line of the file.
-        return lines.length > 0 ? lines[0].trim() : "";
-    }
+//    public String extractName(String text) {
+//        String[] lines = text.split("\\n");
+//        for (String line : lines) {
+//            // Looks for a line starting with "Name:", case-insensitive
+//            if (line.matches("(?i)name[:\\s]*[A-Za-z\\s]{3,}")) {
+//                // Removes the "Name:" part and returns the rest
+//                return line.replaceAll("(?i)name[:\\s]*", "").trim();
+//            }
+//        }
+//        // If no line with "Name:" is found, it just returns the first line of the file.
+//        return lines.length > 0 ? lines[0].trim() : "";
+//    }
+//
+//    public String extractName(String text) {
+//        String[] lines = text.split("\\r?\\n");
+//
+//        for (String line : lines) {
+//            String l = line.trim();
+//
+//            // skip empty lines
+//            if (l.isEmpty()) continue;
+//
+//            // skip long lines (likely description)
+//            if (l.length() > 40) continue;
+//
+//            // name should not contain digits or weird symbols
+//            if (!l.matches("^[A-Za-z .'-]{3,40}$")) continue;
+//
+//            // must have at least one space (First + Last)
+//            if (!l.contains(" ")) continue;
+//
+//            return l;
+//        }
+//
+//        return "";
+//    }
 
-        // -------- SKILLS --------
+
+    // -------- SKILLS --------
         public String extractSkills(String text) throws IOException {
 
 //            List<String> skills = Files.readAllLines(Paths.get("src/main/resources/skills.txt"));
@@ -575,9 +503,17 @@ public class ResumeDataService {
 
 
 
-    private String cleanText(String value) {
-        if (value == null) return null;
-        return value.replaceAll("[\\x00-\\x1F\\x7F]", "").trim();
+//    public static String cleanText(String input) {
+//        if (input == null) return null;
+//        return input.replace("\u0000", ""); // removes null byte
+//    }
+
+    public static String cleanText(String text) {
+        if (text == null) return null;
+        return text
+                .replace("\u0000", "")            // remove null byte
+                .replaceAll("[\\p{Cc}\\p{Cs}]", "") // remove control + surrogate chars
+                .trim();
     }
 
 
@@ -638,7 +574,7 @@ public class ResumeDataService {
                     }
 
                     // Extract raw text from file (your existing method)
-                    String text = extractTextFromFile(file);
+                    String text =extractTextFromFile(file);
 
                     // Extract fields
                     String email = extractEmail(text);
@@ -676,7 +612,7 @@ public class ResumeDataService {
 
                     // Prepare data
                     Map<String, String> extractedData = new HashMap<>();
-                    extractedData.put("fullName", extractName(text));
+                    extractedData.put("fullName", NameExtractor.extractName(text));
                     extractedData.put("email", email);
                     extractedData.put("phoneNumber", phone);
                     extractedData.put("skills", extractSkills(text));
@@ -691,29 +627,29 @@ public class ResumeDataService {
 
                     // Create entity for DB
                     ResumeData resumeData = new ResumeData();
-                    resumeData.setFullName(extractedData.get("fullName"));
-                    resumeData.setEmail(email);
-                    resumeData.setPhoneNumber(phone);
-                    resumeData.setSkills(extractedData.get("skills"));
-                    resumeData.setAddress(extractedData.get("address"));
-                    resumeData.setExperience(extractedData.get("experience"));
-                    resumeData.setCompany(extractedData.get("company"));
-                    resumeData.setDesignation(extractedData.get("designation"));
-                    resumeData.setEducation(extractedData.get("education"));
+//                    resumeData.setFullName(extractedData.get("fullName"));
+//                    resumeData.setEmail(email);
+//                    resumeData.setPhoneNumber(phone);
+//                    resumeData.setSkills(extractedData.get("skills"));
+//                    resumeData.setAddress(extractedData.get("address"));
+//                    resumeData.setExperience(extractedData.get("experience"));
+//                    resumeData.setCompany(extractedData.get("company"));
+//                    resumeData.setDesignation(extractedData.get("designation"));
+//                    resumeData.setEducation(extractedData.get("education"));
+//                    resumeData.setFilePath(filePath.toString());
+//                    resumeData.setFileHash(fileHash);
+
+                    resumeData.setFullName(cleanText(extractedData.get("fullName")));
+                    resumeData.setEmail(cleanText(email));
+                    resumeData.setPhoneNumber(cleanText(phone));
+                    resumeData.setSkills(cleanText(extractedData.get("skills")));
+                    resumeData.setAddress(cleanText(extractedData.get("address")));
+                    resumeData.setExperience(cleanText(extractedData.get("experience")));
+                    resumeData.setCompany(cleanText(extractedData.get("company")));
+                    resumeData.setDesignation(cleanText(extractedData.get("designation")));
+                    resumeData.setEducation(cleanText(extractedData.get("education")));
                     resumeData.setFilePath(filePath.toString());
                     resumeData.setFileHash(fileHash);
-
-//                    resumeData.setFullName(extractedData.get("fullName"));
-//                    resumeData.setEmail(cleanText(email));
-//                    resumeData.setPhoneNumber(cleanText(phone));
-//                    resumeData.setSkills(cleanText(extractedData.get("skills")));
-//                    resumeData.setAddress(cleanText(extractedData.get("address")));
-//                    resumeData.setExperience(cleanText(extractedData.get("experience")));
-//                    resumeData.setCompany(cleanText(extractedData.get("company")));
-//                    resumeData.setDesignation(cleanText(extractedData.get("designation")));
-//                    resumeData.setEducation(cleanText(extractedData.get("education")));
-//                    resumeData.setFilePath(cleanText(filePath.toString()));
-//                    resumeData.setFileHash(cleanText(fileHash));
 
 
                     candidatesToSave.add(resumeData);
