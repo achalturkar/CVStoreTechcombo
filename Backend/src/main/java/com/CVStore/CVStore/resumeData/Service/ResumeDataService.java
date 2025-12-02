@@ -562,7 +562,15 @@ public class ResumeDataService {
             this.resumeDataRepository = resumeDataRepository;
         }
 
-        public Map<String, Object> parseMultipleResumes(MultipartFile[] files, String uploadDir) {
+
+
+    private String cleanText(String value) {
+        if (value == null) return null;
+        return value.replaceAll("[\\x00-\\x1F\\x7F]", "").trim();
+    }
+
+
+    public Map<String, Object> parseMultipleResumes(MultipartFile[] files, String uploadDir) {
             List<Map<String, String>> perFileResults = new ArrayList<>();
             List<ResumeData> candidatesToSave = new ArrayList<>();
             Set<String> emailsInBatch = new HashSet<>();
@@ -619,7 +627,7 @@ public class ResumeDataService {
                     }
 
                     // Extract raw text from file (your existing method)
-                    String text = extractTextFromFile(file);
+                    String text = cleanText(extractTextFromFile(file));
 
                     // Extract fields
                     String email = extractEmail(text);
@@ -672,17 +680,30 @@ public class ResumeDataService {
 
                     // Create entity for DB
                     ResumeData resumeData = new ResumeData();
-                    resumeData.setFullName(extractedData.get("fullName"));
-                    resumeData.setEmail(email);
-                    resumeData.setPhoneNumber(phone);
-                    resumeData.setSkills(extractedData.get("skills"));
-                    resumeData.setAddress(extractedData.get("address"));
-                    resumeData.setExperience(extractedData.get("experience"));
-                    resumeData.setCompany(extractedData.get("company"));
-                    resumeData.setDesignation(extractedData.get("designation"));
-                    resumeData.setEducation(extractedData.get("education"));
-                    resumeData.setFilePath(filePath.toString());
-                    resumeData.setFileHash(fileHash);
+//                    resumeData.setFullName(extractedData.get("fullName"));
+//                    resumeData.setEmail(email);
+//                    resumeData.setPhoneNumber(phone);
+//                    resumeData.setSkills(extractedData.get("skills"));
+//                    resumeData.setAddress(extractedData.get("address"));
+//                    resumeData.setExperience(extractedData.get("experience"));
+//                    resumeData.setCompany(extractedData.get("company"));
+//                    resumeData.setDesignation(extractedData.get("designation"));
+//                    resumeData.setEducation(extractedData.get("education"));
+//                    resumeData.setFilePath(filePath.toString());
+//                    resumeData.setFileHash(fileHash);
+
+                    resumeData.setFullName(cleanText(extractedData.get("fullName")));
+                    resumeData.setEmail(cleanText(email));
+                    resumeData.setPhoneNumber(cleanText(phone));
+                    resumeData.setSkills(cleanText(extractedData.get("skills")));
+                    resumeData.setAddress(cleanText(extractedData.get("address")));
+                    resumeData.setExperience(cleanText(extractedData.get("experience")));
+                    resumeData.setCompany(cleanText(extractedData.get("company")));
+                    resumeData.setDesignation(cleanText(extractedData.get("designation")));
+                    resumeData.setEducation(cleanText(extractedData.get("education")));
+                    resumeData.setFilePath(cleanText(filePath.toString()));
+                    resumeData.setFileHash(cleanText(fileHash));
+
 
                     candidatesToSave.add(resumeData);
 
@@ -730,6 +751,5 @@ public class ResumeDataService {
 
             return finalResponse;
         }
-
 
 }
